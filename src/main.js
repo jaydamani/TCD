@@ -6,9 +6,10 @@ let { registerEvents, registerFunctions, registerCommands } = require("./registr
 client.commandMap = new Map();
 
 (async() => {
+
 	await registerCommands("./src/Commands",client)
 	await registerEvents("./src/Events",client)
-	console.time()
-	//client.delay(["1m","1s"],"test")
+
 	client.login(bot.token).catch(console.error)
+
 })()
