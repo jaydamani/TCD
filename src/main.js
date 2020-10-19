@@ -4,7 +4,7 @@ let bot = require("../config/bot")
 let { registerEvents, registerFunctions, registerCommands } = require("./registry/registry")
 
 client.commandMap = new Map();
-
+//yo
 (async() => {
 	await registerCommands("./src/Commands",client)
 	await registerEvents("./src/Events",client)
