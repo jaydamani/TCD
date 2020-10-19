@@ -13,3 +13,4 @@ client.commandMap = new Map();
 	client.login(bot.token).catch(console.error)
 
 })()
+//asfkosfopiuweofiuweofiuweoifjcaweopj
