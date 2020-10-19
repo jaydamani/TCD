@@ -104,3 +104,4 @@ dist
 .tern-port
 # bot private file
 config/bot.json
+modDB.db
