@@ -105,3 +105,5 @@ dist
 # bot private file
 config/bot.json
 modDB.db
+#vscode config
+.vscode
