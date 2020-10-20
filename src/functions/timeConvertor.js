@@ -33,8 +33,8 @@ let array = Object.values(units).sort((a,b) => a.amount - b.amount)
 module.exports = function(timeArray){
 	
 	let t = 0
-	let time
-	let timeString = ''
+	let obj
+	let string = ''
 	
 	for(let time of timeArray){
 
@@ -44,7 +44,7 @@ module.exports = function(timeArray){
 
 	} 
 
-	time = new Date((new Date).getTime + t)
+	obj = new Date((new Date).getTime + t)
 
 	for (const a in array) {
 
@@ -54,12 +54,12 @@ module.exports = function(timeArray){
 		if(array[+a + 1]) b = t%array[+a + 1].amount
 		else b = t
 		
-		if(b == 1) timeString += ` ${b/array[a].amount} ${array[a].name}`
-		else if(b) timeString += ` ${b/array[a].amount} ${array[a].name}s` 
+		if(b == 1) string += ` ${b/array[a].amount} ${array[a].name}`
+		else if(b) string += ` ${b/array[a].amount} ${array[a].name}s` 
 		t -= b
 		
 	}
 	
-	return { time ,timeString }
+	return { obj, string }
 
 }

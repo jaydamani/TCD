@@ -2,24 +2,18 @@ const modEmbed = require('../../registry/structures/modEmbed')
 const { mod : { muteRoleID },logs : { modLog }} = require('../../../config/guild.json')
 
 const actionsList = {
-    //warn is here in case something extra needs to be done. Like a warned role
+    //warn is here in case something extra needs to be done. Like a warned role or probably some sort of cooldown
     warn : ({ mod, offender, reason }) => {},
     ban : ({ mod, offender, reason, time, guild }) => {
     
-        guild.members.ban(offender,{ reason })
-    
-        if(time){
-
-
-
-        }
+        guild.members.ban(offender,{ reason : `banned by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time.string}.`})
     
     },
     mute : ({ mod, offender, reason, time },db) => {
 
         if(offender.roles){
 
-            offender.roles.add(muteRoleID,`muted by ${mod.displayName}(${mod.id}) for following reason : ${reason}`)
+            offender.roles.add(muteRoleID,`muted by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time.string}.`)
 
         }else{
 
@@ -27,16 +21,10 @@ const actionsList = {
 
         }
 
-        if(time){
-
-
-
-        }
-
     },
     kick : ({ mod, offender, reason, }) => {
 
-        offender.kick(`kicked by ${mod.displayName}(${mod.id}) for following reason : ${reason}`)
+        offender.kick(`banned by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time.string}.`)
 
     }
 
@@ -44,8 +32,8 @@ const actionsList = {
 
 module.exports = async (obj = { mod : this.guild.me, offender, reason, time, action, guild },db) => {
 
-    actionsList[obj.action.name](obj,db)
-    let { lastInsertRowid } = db.prepare(`insert into ${obj.action.name}sTable (offenderID,modID,reason) values (?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason)
+    actionsList[obj.action](obj,db)
+    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason) values (?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason)
 
     obj.id = lastInsertRowid
     obj.guild.channels.cache.get(modLog).send({ 

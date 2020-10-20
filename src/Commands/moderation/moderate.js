@@ -4,10 +4,10 @@ const moderate = require('../../functions/moderation/moderate')
 const timeConvertor = require("../../functions/timeConvertor");
 const obj = {
 
-    warn : { perm : 8, past : 'warned', name : 'warn'},
-    mute : { perm : 'MANAGE_ROLES', past : 'muted', name: 'mute'},
-    kick : { perm : 'KICK_MEMBERS', past : 'kicked', name: 'kick'},
-    ban : { perm : 'BAN_MEMBERS', past : 'baned', name: 'ban'},
+    warn : { perm : 8, name : 'warn'},
+    mute : { perm : 'MANAGE_ROLES', name: 'mute'},
+    kick : { perm : 'KICK_MEMBERS', name: 'kick'},
+    ban : { perm : 'BAN_MEMBERS', name: 'ban'},
 
 }
 
@@ -20,8 +20,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
 
     let action = obj[cmd.toLowerCase()]
     let [offenderID,...reason] = argz
-    let time
-    let t = ''
+    let time = { string : '', obj : null}
     let mod = message.member
     let guild = message.guild
     let db = new require('better-sqlite3')('./ModDB.db')
@@ -36,19 +35,17 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
 
     switch (action.name) {
         case 'mute' :
+            action.past = 'muted'
         case 'ban' :
         
         let status = db.prepare(`select status from ${action.name}sTable where offenderID = ${offenderID} and status = 1 `).get()
         if(status) return message.channel.send(`The user has already been ${action.past}`)
 
-        time = reason[0].match(/[0-9]+[s,m,h,d,w,M,y]/g)
-        console.log(time)
-        if(time){
+        time.obj = reason[0].match(/[0-9]+[s,m,h,d,w,M,y]/g)
+        if(time.obj){
 
                 reason.shift()
-                let a = timeConvertor(time)
-                t = ' for' + a.timeString
-                time = a.timeInMS
+                time = timeConvertor(time)
                 
         }
         break
@@ -62,7 +59,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
         if(offender.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
         moderate({ mod, offender, guild, time, reason, action },db).then(() => {
             
-            message.channel.send( `${offender} was ${action.past}${t}.`)
+            message.channel.send( `${offender} was ${action.past || action.name}${time.string}.`)
 
         })
         
@@ -73,9 +70,9 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
         else if(err.message == 'Unknown Member') client.users.fetch(offenderID).then(offender => {
 
             if(action.name == 'kick') return message.channel.send(`I can't seem to kick people outside of this server like the guy you mentioned. Any idea why?`)
-            moderate({ mod, offender, guild, time, reason, action }).then(() => {
+            moderate({ mod, offender, guild, time, reason, action : action.name }).then(() => {
                 
-                message.channel.send(`${offender.username}#${offender.discriminator} was ${action.past} even though he wasn't in the guild${t}.`)
+                message.channel.send(`${offender.username}#${offender.discriminator} was ${action.past} even though he wasn't in the guild${time.string}.`)
 
             })
 
