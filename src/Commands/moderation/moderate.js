@@ -8,13 +8,16 @@ const obj = {
     mute : { perm : 'MANAGE_ROLES', past : 'muted', name: 'mute'},
     kick : { perm : 'KICK_MEMBERS', past : 'kicked', name: 'kick'},
     ban : { perm : 'BAN_MEMBERS', past : 'baned', name: 'ban'},
-    shut : this.mute,
-    yeet : this.kick
 
 }
 
-module.exports = new baseCommand('warn',['mute','kick','ban','shut','yeet'],(cmd,argz,message,client) => {
-    console.log(420)
+obj.shut = obj.mute
+obj.yeet = obj.ban
+
+module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,client) => {
+    
+    if(argz.length < 2) return message.channel.send('not enough argz')
+
     let action = obj[cmd.toLowerCase()]
     let [offenderID,...reason] = argz
     let time
@@ -23,12 +26,9 @@ module.exports = new baseCommand('warn',['mute','kick','ban','shut','yeet'],(cmd
     let guild = message.guild
     let db = new require('better-sqlite3')('./ModDB.db')
 
-    reason = reason.join(' ')
-
     offenderID = offenderID.match(/(?=<@!?)?([0-9]{15,})>?/)
 
     if(!offenderID) return message.channel.send('The given ID seems wrong.')
-    if(!reason) return message.channel.send('Please specify a reason') 
     offenderID = offenderID[1]
 
     if(!permArrays['can_' + action.name].includes(mod.roles.highest.id) && !mod.hasPermission(action.perm)) return message.channel.send("you don't have required perms")
@@ -38,11 +38,11 @@ module.exports = new baseCommand('warn',['mute','kick','ban','shut','yeet'],(cmd
         case 'mute' :
         case 'ban' :
         
-        let a = db.prepare(`select status from ${action.name}sTable where offenderID = ${offenderID} and status = 1 `).get()
-        console.log(a,69)
-        if(a) return message.channel.send(`The user has already been ${action.past}`)
+        let status = db.prepare(`select status from ${action.name}sTable where offenderID = ${offenderID} and status = 1 `).get()
+        if(status) return message.channel.send(`The user has already been ${action.past}`)
 
         time = reason[0].match(/[0-9]+[s,m,h,d,w,M,y]/g)
+        console.log(time)
         if(time){
 
                 reason.shift()
@@ -54,10 +54,13 @@ module.exports = new baseCommand('warn',['mute','kick','ban','shut','yeet'],(cmd
         break
     }
 
+    reason = reason.join(' ')
+    if(!reason) return message.channel.send('Please specify a reason') 
+
     guild.members.fetch(offenderID).then(offender => {
 
         if(offender.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
-        moderate({ mod, offender, guild, time, reason, action }).then(() => {
+        moderate({ mod, offender, guild, time, reason, action },db).then(() => {
             
             message.channel.send( `${offender} was ${action.past}${t}.`)
 

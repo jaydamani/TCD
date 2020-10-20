@@ -1,4 +1,3 @@
-let baseFunction = require("../registry/structures/baseFunction")
 let units = {
 	s :{
 		amount : 1000,
@@ -52,10 +51,11 @@ module.exports = function(timeArray){
 		if(t <= 1000) break
 		let b
 
-		if(array[+a + 1]) b = t%units[+a + 1].amount
+		if(array[+a + 1]) b = t%array[+a + 1].amount
 		else b = t
 		
-		timeString += ` ${b/array[a].amount} ${array[a].name}`
+		if(b == 1) timeString += ` ${b/array[a].amount} ${array[a].name}`
+		else if(b) timeString += ` ${b/array[a].amount} ${array[a].name}s` 
 		t -= b
 		
 	}
