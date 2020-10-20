@@ -4,10 +4,10 @@ const { MessageEmbed } = require("discord.js")
 module.exports = class modEmbed extends MessageEmbed{
     constructor({ mod, offender, reason, action, time, id}){
         super({
-            title : `${offender.displayName || `${offender.username}#${offender.discriminator}`}`,
+            title : `${offender.displayName || `${offender.username}#${offender.discriminator}`} was ${action.past}`,
             type : 'rich',
             description: ``,
-            timestamp : new Date(),
+            timestamp : new Date(time),
             color : ``,
             fields : [
                 {
