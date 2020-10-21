@@ -15,11 +15,7 @@ let units = {
 		amount : 1000*60*60*24,
 		name : 'day'
 	},
-	w : {
-		amount : 1000*60*60*24*4,
-		name : 'week'
-	},
-	m : {
+	M : {
 		amount : 1000*60*60*24*30,
 		name : 'month'
 	},
@@ -44,18 +40,14 @@ module.exports = function(timeArray){
 
 	} 
 
-	obj = new Date((new Date).getTime + t)
+	obj = new Date((new Date()).getTime() + t)
 
 	for (const a in array) {
 
 		if(t <= 1000) break
-		let b
-
-		if(array[+a + 1]) b = t%array[+a + 1].amount
-		else b = t
+		let b = array[+a + 1] ? t % array[+a + 1].amount : t
 		
-		if(b == 1) string += ` ${b/array[a].amount} ${array[a].name}`
-		else if(b) string += ` ${b/array[a].amount} ${array[a].name}s` 
+		if(b != 0) string += ` ${b/array[a].amount} ${array[a].name}${b == 1 ? '' : 's'}` 
 		t -= b
 		
 	}

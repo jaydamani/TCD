@@ -18,17 +18,17 @@ const actionsList = {
 //I can't think of a name for the object with all the info like 
 //who did ban/mute so naming it obj
 
-module.exports = (obj = { mod, offender, reason, oldObj, action, guild},db) => {
-
-    db.prepare(`update ${obj.oldObj.action.name}sTable set status = 0, reasonTo${obj.action.name} = ?, modFor${obj.action.name} = ? where offenderID = ${obj.offender.id}`).run()
+module.exports = (obj = { mod, offender, reason, dbObj, action, guild},db) => {
 
     actionsList[obj.action.name](obj,db)
+
+    db.prepare(`update ${obj.action.substring(2)}sTable set status = 0, reasonTo${obj.action.name} = ?, modFor${obj.action.name} = ? where offenderID = ${obj.offender.id}`).run()    
 
     obj.guild.channels.get(modLog).send({
         embed : new modEmbed(obj)
         .addField(`Mod responsible for punishment :`,obj.oldObj.mod)
         .addField(`Reason for punishment :`,obj.oldObj.reason)
-        .setTimestamp(obj.time)
+        .setTimestamp(dbObj.time)
     })
 
 }

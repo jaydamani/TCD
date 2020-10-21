@@ -39,13 +39,14 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
         case 'ban' :
         
         let status = db.prepare(`select status from ${action.name}sTable where offenderID = ${offenderID} and status = 1 `).get()
-        if(status) return message.channel.send(`The user has already been ${action.past}`)
+        if(status) return message.channel.send(`The user has already been ${action.past || action.name + 'ed'}`)
 
-        time.obj = reason[0].match(/[0-9]+[s,m,h,d,w,M,y]/g)
+        time.obj = reason[0].match(/([0-9]+[s,m,h,d,w,M,y],?)+/)
         if(time.obj){
 
                 reason.shift()
-                time = timeConvertor(time)
+                time.obj = time.obj[0].match(/[0-9]+[s,m,h,d,w,M,y]/g)
+                time = timeConvertor(time.obj)
                 
         }
         break
@@ -57,9 +58,9 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
     guild.members.fetch(offenderID).then(offender => {
 
         if(offender.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
-        moderate({ mod, offender, guild, time, reason, action },db).then(() => {
+        moderate({ mod, offender, guild, time, reason, action : action.name },db).then(() => {
             
-            message.channel.send( `${offender} was ${action.past || action.name}${time.string}.`)
+            message.channel.send( `${offender} was ${action.past || action.name}${time.string ? ' for' + time.string : ''}.`)
 
         })
         
