@@ -15,7 +15,7 @@ obj.shut = obj.mute
 obj.yeet = obj.ban
 
 module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,client) => {
-    
+    console.time()
     if(argz.length < 2) return message.channel.send('not enough argz')
 
     let action = obj[cmd.toLowerCase()]
@@ -31,7 +31,6 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
     offenderID = offenderID[1]
 
     if(!permArrays['can_' + action.name].includes(mod.roles.highest.id) && !mod.hasPermission(action.perm)) return message.channel.send("you don't have required perms")
-
 
     switch (action.name) {
         case 'mute' :
@@ -60,11 +59,10 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
         if(offender.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
         moderate({ mod, offender, guild, time, reason, action : action.name },db).then(() => {
             
-            message.channel.send( `${offender} was ${action.past || action.name}${time.string ? ' for' + time.string : ''}.`)
-
+            message.channel.send( `${offender} was ${action.past || action.name + 'ed'}${time.string ? ' for' + time.string : ''}.`)
+            console.timeEnd()
         })
         
-
     }).catch(err => {
         
         if(err.message == 'Unknown User') message.channel.send(`The given ID seems wrong.`)
@@ -73,8 +71,8 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
             if(action.name == 'kick') return message.channel.send(`I can't seem to kick people outside of this server like the guy you mentioned. Any idea why?`)
             moderate({ mod, offender, guild, time, reason, action : action.name }).then(() => {
                 
-                message.channel.send(`${offender.username}#${offender.discriminator} was ${action.past} even though he wasn't in the guild${time.string}.`)
-
+                message.channel.send(`${offender.username}#${offender.discriminator} was ${action.past || action.name + 'ed'}${time.string ? ' for' + time.string : ''} even though he wasn't in the guild${time.string ? time.string : ''}.`)
+                console.timeEnd()
             })
 
         })

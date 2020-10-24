@@ -18,24 +18,25 @@ const actionsList = {
 //I can't think of a name for the object with all the info like 
 //who did ban/mute so naming it obj
 
-module.exports = async (obj = { mod , offender, reason, action, guild, old },oldObj,db =  new require('better-sqlite3')('./modDB')) => {
+module.exports = async (obj = { mod , offender, reason, action, guild},dbObj,db =  new require('better-sqlite3')('./modDB.db')) => {
 
-    if(!oldObj){
+    if(!dbObj){
     
-        oldObj = db.prepare(`select rowid,modID,offenderID,reason,time from ${obj.action.substring(2)}sTable where (offenderID = ${obj.offender.id} or rowid = ${obj.id}) and status = 1`).get()
-        oldObj.mod = await obj.guild.members.fetch(oldObj.modID) ?? await obj.guild.client.users.fetch(oldObj.modID)
+        dbObj = db.prepare(`select * from ${obj.action.substring(2)}sTable where offenderID = ${obj.offender.id} and status = 1`).get()
 
     }
-    obj.id = oldObj.rowid
-    actionsList[obj.action.name](obj,db)
+    
+    obj.id = dbObj.ID
+    console.log(obj.guild)
+    actionsList[obj.action](obj,db)
+    console.log(obj.id,dbObj)
+    db.prepare(`update ${obj.action.substring(2)}sTable set status = 0, reasonOf${obj.action} = ?, modFor${obj.action} = ? where ID = ${obj.id}`).run(obj.reason,obj.mod.id)    
 
-    db.prepare(`update ${obj.action.substring(2)}sTable set status = 0, reasonTo${obj.action.name} = ?, modFor${obj.action.name} = ? where ID = ${obj.id}`).run()    
-
-    obj.guild.channels.get(modLog).send({
+    obj.guild.channels.cache.get(modLog).send({
         embed : new modEmbed(obj)
-        .addField(`Mod responsible for punishment :`,oldObj.mod)
-        .addField(`Reason for punishment :`,oldObj.reason)
-        .setTimestamp(oldObj.time)
+        .addField(`Mod responsible for punishment :`,`<@${dbObj.modID}> (${dbObj.modID})`)
+        .addField(`Reason for punishment :`,dbObj.reason)
+        .setTimestamp(dbObj.time)
     })
 
 }

@@ -7,7 +7,7 @@ module.exports = class modEmbed extends MessageEmbed{
             title : `A ${action} was done.`,
             type : 'rich',
             description: ``,
-            timestamp : time.obj,
+            timestamp : time ? time.obj : new Date(),
             color : ``,
             fields : [
                 {

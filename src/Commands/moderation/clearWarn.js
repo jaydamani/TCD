@@ -1,4 +1,4 @@
-const baseCommand = require('../../registry/baseCommand')
+const baseCommand = require('../../registry/structures/baseCommand')
 const { mod : { canWarn }} = require('../../../config/guild.json')
 const { MessageEmbed } = require('discord.js')
 
