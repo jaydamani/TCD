@@ -4,6 +4,7 @@ let bot = require("../config/bot")
 let { registerEvents, registerFunctions, registerCommands } = require("./registry/registry")
 
 client.commandMap = new Map();
+client.db = new require('better-sqlite3')('./ModDB.db')
 
 (async() => {
 

@@ -11,7 +11,7 @@ module.exports = new baseCommand('unmute',['unshut'],(cmd,argz,message,client) =
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
 
     let start = process.hrtime()
-    let db = new require('better-sqlite3')('./modDB.db')
+    let db = client.db
     let [dbObj,...reason] = argz
     let mod = message.member
     let guild = message.guild

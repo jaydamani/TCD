@@ -4,7 +4,7 @@ module.exports = new baseEvent('ready',(client) => {
     
     let guild = client.guilds.cache.get(`727853079029874740`)
     let members = guild.members.cache
-    let db = require('better-sqlite3')('./modDB.db')
+    let db = client.db
     let rolesArray = db.prepare('select * from roles').all()
     let rolesMap = new Map()
     let newMembers = ''

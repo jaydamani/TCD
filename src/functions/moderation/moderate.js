@@ -33,7 +33,7 @@ const actionsList = {
 module.exports = async (obj = { mod : this.guild.me, offender, reason, time, action, guild },db = new require('better-sqlite3')('./ModDB.db')) => {
 
     actionsList[obj.action](obj,db)
-    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason) values (?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason)
+    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason,timeForUn${action}) values (?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.time)
 
     obj.id = lastInsertRowid
     obj.guild.channels.cache.get(modLog).send({ 

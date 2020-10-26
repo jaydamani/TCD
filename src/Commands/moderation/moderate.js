@@ -4,10 +4,10 @@ const moderate = require('../../functions/moderation/moderate')
 const timeConvertor = require("../../functions/timeConvertor");
 const obj = {
 
-    warn : { perm : 8, name : 'warn'},
-    mute : { perm : 'MANAGE_ROLES', name: 'mute'},
-    kick : { perm : 'KICK_MEMBERS', name: 'kick'},
-    ban : { perm : 'BAN_MEMBERS', name: 'ban'},
+    warn : { perm : 8, name : 'warn', past : 'warned'},
+    mute : { perm : 'MANAGE_ROLES', name: 'mute', past : 'muted'},
+    kick : { perm : 'KICK_MEMBERS', name: 'kick', past : 'kicked'},
+    ban : { perm : 'BAN_MEMBERS', name: 'ban', past : 'baned'},
 
 }
 
@@ -23,7 +23,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
     let time = { string : '', obj : null}
     let mod = message.member
     let guild = message.guild
-    let db = new require('better-sqlite3')('./ModDB.db')
+    let db = client.db
 
     offenderID = offenderID.match(/(?=<@!?)?([0-9]{15,})>?/)
 
@@ -38,7 +38,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,clien
         case 'ban' :
         
         let status = db.prepare(`select status from ${action.name}sTable where offenderID = ${offenderID} and status = 1 `).get()
-        if(status) return message.channel.send(`The user has already been ${action.past || action.name + 'ed'}`)
+        if(status) return message.channel.send(`The user has already been ${action.past}`)
 
         time.obj = reason[0].match(/([0-9]+[s,m,h,d,w,M,y],?)+/)
         if(time.obj){

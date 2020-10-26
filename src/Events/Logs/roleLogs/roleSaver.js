@@ -1,7 +1,7 @@
 const baseEvent = require("../../../registry/structures/baseEvent");
 let { logs : { memberUpdateChannelID } } = require('../../../../config/guild.json')
 
-module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
+module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember,client) => {
     
     let guild = oldMember.guild
     
@@ -12,7 +12,7 @@ module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
     
     console.log(rolesAdded.keyArray(),rolesRemoved.keyArray(),696969)
     
-    let db = new require('better-sqlite3')('./modDB.db')
+    let db = client.db
     db.prepare('update roles set roleIDs = ?, position = ? where memberID = ?')
     .run(newMember.roles.cache.keyArray().join(),newMember.roles.highest.rawPosition,newMember.id)
 

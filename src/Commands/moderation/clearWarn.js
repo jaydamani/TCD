@@ -6,7 +6,7 @@ module.exports = new baseCommand('clearWarn',['unwarn'],(cmd,argz,message,client
     
     let guild = message.guild
     let mod = message.member
-    let db = new require('better-sqlite3')('./modDB.db')
+    let db = client.db
     let warn = db.prepare('select * from warnsTable where warnID = ? and status = 1').get(warn)   
     let reason = argz.join(" ")
 
