@@ -14,7 +14,7 @@ const obj = {
 obj.shut = obj.mute
 obj.yeet = obj.ban
 
-module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message,client) => {
+module.exports = new baseCommand('warn',Object.keys(obj),(cmd,argz,message) => {
     console.time()
     if(argz.length < 2) return message.channel.send('not enough argz')
 

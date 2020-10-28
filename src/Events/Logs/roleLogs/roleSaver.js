@@ -1,7 +1,7 @@
 const baseEvent = require("../../../registry/structures/baseEvent");
 let { logs : { memberUpdateChannelID } } = require('../../../../config/guild.json')
 
-module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember,client) => {
+module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
     
     let guild = oldMember.guild
     

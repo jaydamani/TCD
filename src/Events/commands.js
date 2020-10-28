@@ -1,20 +1,20 @@
 let baseEvent = require("../registry/structures/baseEvent")
 let prefix = "-"
 
-module.exports = new baseEvent('message',(message, client) => {
+module.exports = new baseEvent('message',(message) => {
 
 	if(!message.member) return
 	if(!message.content.startsWith(prefix)) return
 	if(message.author.bot) return
 	
 	let [command,...argz] = message.content.slice(prefix.length).trim().split(" ")
-	console.log(command,argz,client.commandMap,10)
+	console.log(command,argz.commandMap,10)
 	
 	if(client.commandMap.has(command)){
 		
 		try {
 
-			client.commandMap.get(command)(command,argz,message,client)
+			client.commandMap.get(command)(command,argz,message)
 		
 		} catch (err) {
 

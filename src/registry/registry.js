@@ -3,14 +3,14 @@ let path = require("path")
 let baseEvent = require("./structures/baseEvent")
 let baseCommand = require("./structures/baseCommand")
 
-async function registerCommands(dir,client){
+async function registerCommands(dir){
 
 	let files = await fs.promises.readdir(dir,{withFileTypes : true})
 	
 	for(let file of files){
 
 		if(file.isDirectory()){
-			registerCommands(path.join(dir,file.name),client)
+			registerCommands(path.join(dir,file.name))
 			continue
 		}
 
@@ -31,16 +31,16 @@ async function registerCommands(dir,client){
 
 let eventsMap = new Map()
 
-async function registerEvents(dirPath,client){
+async function registerEvents(dirPath){
 
-	async function registerFiles(dir,client){
+	async function registerFiles(dir){
 
 		let files = await fs.promises.readdir(dir,{withFileTypes : true})
 		
 		for(let file of files){
 
 			if(file.isDirectory()){
-				await registerFiles(path.join(dir,file.name),client)
+				await registerFiles(path.join(dir,file.name))
 				continue
 			}
 
@@ -55,10 +55,10 @@ async function registerEvents(dirPath,client){
 
 	}
 
-	await registerFiles(dirPath,client)
+	await registerFiles(dirPath)
 	for(let eventArray of eventsMap){
 
-		client.on(eventArray[0],(...params) => eventArray[1].forEach(code => code(...params,client)))
+		client.on(eventArray[0],(...params) => eventArray[1].forEach(code => code(...params)))
 		
 	}
 

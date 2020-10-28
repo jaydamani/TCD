@@ -1,7 +1,7 @@
 const baseCommand = require("../../registry/structures/baseCommand")
 const { mod : { can_ban } } = require('../../../config/guild.json')
 const exempt = require("../../functions/moderation/exempt")
-module.exports = new baseCommand('unban',[],(cmd,argz,message,client) => {
+module.exports = new baseCommand('unban',[],(cmd,argz,message) => {
 
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
     

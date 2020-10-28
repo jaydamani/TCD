@@ -1,6 +1,6 @@
 const baseEvent = require("../../../registry/structures/baseEvent");
 
-module.exports = new baseEvent('ready',(client) => {
+module.exports = new baseEvent('ready',() => {
     
     let guild = client.guilds.cache.get(`727853079029874740`)
     let members = guild.members.cache
