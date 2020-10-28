@@ -1,4 +1,4 @@
-const { mod : { muteRoleID }, logs : { modLog }} = require('../../../config/guild.json')
+const { mod : { muteRoleID }, logs : { modLog }} = config
 const modEmbed = require('../../registry/structures/modEmbed')
 const actionsList = {
 

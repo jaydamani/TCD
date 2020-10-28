@@ -1,5 +1,5 @@
 const baseCommand = require("../../registry/structures/baseCommand")
-const { mod : modPerm  } = require('../../../config/guild.json')
+const { mod : modPerm  } = config
 const exempt = require("../../functions/moderation/exempt")
 const actionsList = {
     unban : { name : 'Unban', a : 'ban', perm : 'BAN_MEMBERS'},

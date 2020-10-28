@@ -13,5 +13,32 @@
 	},
 	"leveling" : {
 		"boostedRoles" : []
+	},
+	"ratelimits" : {
+		"message" : [{
+			"amount" : 10,
+			"time" : 10,
+			"punishments" : ["deleteAll"]
+		}],
+		"link" : [{
+			"amount" : 2,
+			"time" : 60,
+			"punishments" : ["deleteAll"]
+		}],
+		"attachment" : [{
+			"amount" : 2,
+			"time" : 60,
+			"punishments" : ["deleteAll"]
+		}],
+		"invite" : [{
+			"amount" : 2,
+			"time" : 60,
+			"punishments" : ["deleteAll"]
+		}],
+		"mention" : [{
+			"amount" : 2,
+			"time" : 60,
+			"punishments" : ["deleteAll"]
+		}]
 	}
 }

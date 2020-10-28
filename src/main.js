@@ -1,7 +1,8 @@
-let discord = require("discord.js")
+const discord = require("discord.js")
 global.client = new discord.Client({ fetchAllMembers : true, allowedMentions : { parse : ['users'] }})
-let bot = require("../config/bot")
-let { registerEvents, registerFunctions, registerCommands } = require("./registry/registry")
+global.config = require('../config/guild.json')
+const bot = require("../config/bot")
+const { registerEvents, registerFunctions, registerCommands } = require("./registry/registry")
 
 client.commandMap = new Map()
 client.db = new require('better-sqlite3')('./ModDB.db');

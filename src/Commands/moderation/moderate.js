@@ -1,5 +1,5 @@
 const baseCommand = require("../../registry/structures/baseCommand");
-const { mod : permArrays } = require('../../../config/guild.json')
+const { mod : permArrays } = config
 const moderate = require('../../functions/moderation/moderate')
 const timeConvertor = require("../../functions/timeConvertor");
 const obj = {

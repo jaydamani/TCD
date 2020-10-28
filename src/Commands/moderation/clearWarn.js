@@ -1,5 +1,5 @@
 const baseCommand = require('../../registry/structures/baseCommand')
-const { mod : { canWarn }} = require('../../../config/guild.json')
+const { mod : { canWarn }} = config
 const { MessageEmbed } = require('discord.js')
 
 module.exports = new baseCommand('clearWarn',['unwarn'],(cmd,argz,message) => {
