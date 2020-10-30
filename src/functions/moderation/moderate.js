@@ -24,16 +24,20 @@ const actionsList = {
     },
     kick : ({ mod, offender, reason, }) => {
 
-        offender.kick(`banned by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time.string}.`)
+        offender.kick(`banned by ${mod.displayName}(${mod.id}) with following reason : '${reason}'.`)
 
     }
 
 }
 
-module.exports = async (obj = { mod : this.guild.me, offender, reason, time, action, guild },db = new require('better-sqlite3')('./ModDB.db')) => {
+module.exports = async (obj = { mod , offender, reason, time, action, guild },db = new require('better-sqlite3')('./ModDB.db')) => {
 
+    obj.mod = obj.mod || obj.guild.me
     actionsList[obj.action](obj,db)
-    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason,timeForUn${action}) values (?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.time)
+
+    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason) values (?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason)
+
+    if(obj.time.string && obj.action != 'kick') db.prepare(`update ${obj.action}sTable set timeOfUn${obj.action} = ? where ID = ${lastInsertRowid}`).run(obj.time.obj.toISOString())
 
     obj.id = lastInsertRowid
     obj.guild.channels.cache.get(modLog).send({ 

@@ -27,9 +27,9 @@ module.exports = async (obj = { mod , offender, reason, action, guild},dbObj,db 
     }
     
     obj.id = dbObj.ID
-    console.log(obj.guild)
+
     actionsList[obj.action](obj,db)
-    console.log(obj.id,dbObj)
+    
     db.prepare(`update ${obj.action.substring(2)}sTable set status = 0, reasonOf${obj.action} = ?, modFor${obj.action} = ? where ID = ${obj.id}`).run(obj.reason,obj.mod.id)    
 
     obj.guild.channels.cache.get(modLog).send({

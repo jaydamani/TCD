@@ -1,16 +1,19 @@
 const moderate = require("../../functions/moderation/moderate")
+const timeConvertor = require('../../functions/timeConvertor')
+const MS2String = require('../../functions/MS2String')
 
 module.exports = class cooldown {
 
-    constructor(ids = [],ratelimits = []){
+    constructor(name,ids = [],ratelimits = []){
 
+        this.name = name
         this.ratelimits = ratelimits.sort((a,b) => b.amount - a.amount)
         this.map = new Map()
         ids.forEach(id => this.map.set(id,[]))
 
     }
 
-    add(id,obj = {},...argz){
+    add(id,obj = {},offender,guild){
 
         let arr
         obj._time = obj.createdAt.getTime() || (new Date()).getTime()
@@ -23,25 +26,33 @@ module.exports = class cooldown {
 
             if(ratelimit.amount > arr.length) break
             if(arr[arr.length - 1]._time - arr[arr.length - ratelimit.amount]._time <= ratelimit.time*1000){
+                
                 let punishments = ratelimit.punishments
+                let result
+                
+                if(result = punishments.join().match(/(?:warn|mute|kick|ban)(?: [0-9]+[s,m,h,d,M,y])?/g)) result.forEach(action => {
+                    
+                    let time
+                    [action,time] = action.split(" ")
 
-                if(punishments.includes('warn')){
-
-                }
-                if(punishments.includes('mute')){
-
-                }
-                if(punishments.includes('kick')){
-
-                }
-                if(punishments.includes('ban')){
-
-                }
+                    time =  time ? timeConvertor(time.match(/[0-9]+[s,m,h,d,M,y]/g)) : { obj : null, string : ''}
+                    
+                    moderate({ offender, time, action, guild, reason : `done by automod for hitting ratelimit of ${ratelimit.amount} ${this.name} in ${MS2String(ratelimit.amount*1000)}` } )
+                
+                })
                 if(punishments.includes('delete')){
-
+                
+                    obj.delete()
+                    obj.deleted = true
+                
                 }
-                if(punishments.includes('deleteAll')){
-
+                else if(punishments.includes('deleteAll')){
+                    
+                    arr.filter(obj => !obj.deleted).forEach(obj => {
+                        obj.delete()
+                        obj.deleted = true
+                    })
+                
                 }
 
             }

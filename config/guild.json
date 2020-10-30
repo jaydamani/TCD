@@ -16,28 +16,28 @@
 	},
 	"ratelimits" : {
 		"message" : [{
-			"amount" : 10,
+			"amount" : 2,
 			"time" : 10,
-			"punishments" : ["deleteAll"]
+			"punishments" : ["deleteAll","mute 1y"]
 		}],
 		"link" : [{
 			"amount" : 2,
-			"time" : 60,
+			"time" : 10,
 			"punishments" : ["deleteAll"]
 		}],
 		"attachment" : [{
 			"amount" : 2,
-			"time" : 60,
+			"time" : 10,
 			"punishments" : ["deleteAll"]
 		}],
 		"invite" : [{
 			"amount" : 2,
-			"time" : 60,
+			"time" : 10,
 			"punishments" : ["deleteAll"]
 		}],
 		"mention" : [{
 			"amount" : 2,
-			"time" : 60,
+			"time" : 10,
 			"punishments" : ["deleteAll"]
 		}]
 	}
