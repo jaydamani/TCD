@@ -6,7 +6,8 @@ const actionsList = {
 
         guild.members.unban(offender,`unban by ${mod.displayName}(${mod.id}) for following reason : "${reason}"`)
 
-    },Unmute : ({ mod, offender, reason},db) => {
+    },
+    Unmute : ({ mod, offender, reason},db) => {
 
         if(offender.roles) offender.roles.remove(muteRoleID,`unmute by ${mod.displayName} for following reason '${reason}'`)
         else db.prepare(`update roles set roleIDs = roleIDs || ',${muteRoleID}' where offenderID = ${offender.id} and roleIDs not like ${muteRoleID}`)
@@ -18,14 +19,11 @@ const actionsList = {
 //I can't think of a name for the object with all the info like 
 //who did ban/mute so naming it obj
 
-module.exports = async (obj = { mod , offender, reason, action, guild},dbObj,db =  new require('better-sqlite3')('./modDB.db')) => {
+module.exports = async (obj = { mod , offender, reason, action, guild},dbObj) => {
 
-    if(!dbObj){
-    
-        dbObj = db.prepare(`select * from ${obj.action.substring(2)}sTable where offenderID = ${obj.offender.id} and status = 1`).get()
-
-    }
-    
+    let db = client.db
+    if(!dbObj) dbObj = db.prepare(`select * from ${obj.action.substring(2)}sTable where offenderID = ${obj.offender.id} and status = 1`).get()
+    mod = mod || obj.guild.me
     obj.id = dbObj.ID
 
     actionsList[obj.action](obj,db)
