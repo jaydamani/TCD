@@ -45,10 +45,12 @@ async function registerEvents(dirPath){
 			}
 
 			if(file.name.endsWith('.js')){
+
 				let event = require("../../" + path.join(dir,file.name))
 				if(event.constructor !== baseEvent) continue
-				if(eventsMap.has(event.name)) eventsMap.get(event.name).push(event.code)
-				else eventsMap.set(event.name,[event.code])
+				if(eventsMap.has(event.name)) eventsMap.get(event.name).push(event)
+				else eventsMap.set(event.name,[event])
+			
 			}
 
 		}
@@ -58,7 +60,12 @@ async function registerEvents(dirPath){
 	await registerFiles(dirPath)
 	for(let eventArray of eventsMap){
 
-		client.on(eventArray[0],(...params) => eventArray[1].forEach(code => code(...params)))
+		client.on(eventArray[0],(...params) =>{
+
+			params.map(a => a.partial ? a.fetch() : a)
+			eventArray[1].forEach(({ code }) => code(...params))
+		
+		111})
 		
 	}
 
