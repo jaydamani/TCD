@@ -8,7 +8,7 @@ module.exports = new baseEvent('message',(message) => {
 	if(message.author.bot) return
 	
 	let [command,...argz] = message.content.slice(prefix.length).trim().split(" ")
-	console.log(command,argz.commandMap,10)
+	console.log(command,argz,client.commandMap,10)
 	
 	if(client.commandMap.has(command)){
 		

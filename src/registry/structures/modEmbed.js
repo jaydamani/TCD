@@ -10,6 +10,11 @@ module.exports = class modEmbed extends MessageEmbed{
             color : ``,
             fields : [
                 {
+                    name : `Action`,
+                    value : action,
+                    inline : true
+                },
+                {
                     name : `ID :`,
                     value : id,
                     inline : true

@@ -1,8 +1,8 @@
 const discord = require("discord.js")
 global.client = new discord.Client({ 
-	fetchAllMembers : true, allowedMentions : { parse : ['users'],
-	partials : ['USER','CHANNEL','GUILD_MEMBER','MESSAGE','REACTION']
-}})
+	fetchAllMembers : true, allowedMentions : { parse : ['users'] },
+	partials: ['MESSAGE', 'CHANNEL', 'REACTION'] 
+})
 global.config = require('../config/guild.json')
 const bot = require("../config/bot")
 const { registerEvents, registerCommands } = require("./registry/registry")

@@ -1,2 +1,9 @@
 let baseEvent = require ("../registry/structures/baseEvent")
-module.exports = new baseEvent("ready",() => console.log("ight, Imma start now"))
+const timeEngine = require('../registry/timeEngine')
+
+module.exports = new baseEvent("ready",() => {
+    
+    timeEngine.run()
+    console.log("ight, Imma start now")
+
+})
