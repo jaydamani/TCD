@@ -1,6 +1,6 @@
 const baseEvent = require('C:\Users\genius\Desktop\TCD-1\src/registry/structures/baseEvent');
 
-module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
+module.exports = new baseEvent('messageReactionRemove',(reaction, user) => {
 
     let reactionRoles = client.reactionRoles
     if(!reactionRoles.hasOwnProperty(reaction.message.id)) return
@@ -15,8 +15,8 @@ module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
 
      reactionRole.forEach((obj) => {
 
-        if(obj.onReaction) rolesToAdd += obj.roles
-        else if(obj.onReaction == 0) rolesToRemove += obj.rolesToAdd
+        if(obj.onRemoval) rolesToAdd += obj.roles
+        else if(obj.onRemoval == 0) rolesToRemove += obj.rolesToAdd
     
     })
 
