@@ -1,4 +1,4 @@
-const baseEvent = require('C:\Users\genius\Desktop\TCD-1\src/registry/structures/baseEvent');
+const baseEvent = require('../../registry/structures/baseEvent');
 
 module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
 
@@ -8,7 +8,7 @@ module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
     reactionRoles = reactionRoles[reaction.message.id]
     if(!reactionRoles.hasOwnProperty(`${reaction.name}:${reaction.id}`)) return
 
-    reactionRoles = reactionRoles[reaction.name + reaction.id]
+    reactionRoles = reactionRoles[reaction.id ?? reaction.name]
     let rolesToAdd = ''
     let rolesToRemove = ''
     let member = reaction.message.guild.members.cache.has(user.id)

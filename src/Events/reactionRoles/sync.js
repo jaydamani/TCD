@@ -1,4 +1,4 @@
-const baseEvent = require('C:\Users\genius\Desktop\TCD-1\src/registry/structures/baseEvent');
+const baseEvent = require('../../registry/structures/baseEvent');
 
 module.exports = new baseEvent('ready',() => {
 

@@ -107,3 +107,4 @@ config/bot.json
 modDB.db
 #vscode config
 .vscode
+ModDB.db
