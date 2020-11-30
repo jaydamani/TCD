@@ -40,8 +40,6 @@ module.exports = async (obj = { mod , offender, reason, time, action, guild },db
     let { lastInsertRowid } = db.prepare(`insert into modsTable (offenderID,modID,reason,action,logID,timeOfExemption) values (?,?,?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.action,message.id,obj.time.obj?.toISOString())
 
     obj.id = lastInsertRowid
-    message.edit(offender.id,{ 
-        embed : new modEmbed(obj)
-    })
+    message.edit(offender.id,new modEmbed(obj))
 
 }
