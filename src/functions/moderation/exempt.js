@@ -23,12 +23,12 @@ module.exports = async (obj = { mod , offender, reason, action, guild},dbObj) =>
 
     let db = client.db
     if(!dbObj) dbObj = db.prepare(`select * from ${obj.action.substring(2)}sTable where offenderID = ${obj.offender.id} and status = 1`).get()
-    obj.mod = obj.mod || obj.guild.me
+    obj.mod = obj.mod ?? obj.guild.me
     obj.id = dbObj.ID
 
     actionsList[obj.action](obj,db)
     
-    db.prepare(`update ${obj.action.substring(2)}sTable set status = 0, reasonOf${obj.action} = ?, modFor${obj.action} = ? where ID = ${obj.id}`).run(obj.reason,obj.mod.id)    
+    db.prepare(`update modsTable set status = 0, reasonOfExemption = ?, modForExemption = ?,action = ? where ID = ${obj.id}`).run(obj.reason,obj.mod.id,obj.action.substring(2))    
 
     obj.guild.channels.cache.get(modLog).send({
         embed : new modEmbed(obj)

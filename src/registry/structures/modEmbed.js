@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js")
 
 
 module.exports = class modEmbed extends MessageEmbed{
-    constructor({ mod, offender, reason, action, time, id}){
+    constructor({ mod, offender, reason, action, time, id }){
         super({
             type : 'rich',
             description: ``,
@@ -33,6 +33,10 @@ module.exports = class modEmbed extends MessageEmbed{
                 },{
                     name : `Moderator ID :`,
                     value : mod.id,
+                    inline : true
+                },{
+                    name : `Time Of ${action} :`,
+                    value : time.string ?? 'Indefinitely',
                     inline : true
                 },{
                     name : `Reason :`,

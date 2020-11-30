@@ -35,13 +35,13 @@ module.exports = async (obj = { mod , offender, reason, time, action, guild },db
     obj.mod = obj.mod || obj.guild.me
     actionsList[obj.action](obj,db)
 
-    let { lastInsertRowid } = db.prepare(`insert into ${obj.action}sTable (offenderID,modID,reason) values (?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason)
+    let message = await obj.guild.channels.cache.get(modLog).send(obj.offender.id)
 
-    if(obj.time.string && obj.action != 'kick') db.prepare(`update ${obj.action}sTable set timeOfUn${obj.action} = ? where ID = ${lastInsertRowid}`).run(obj.time.obj.toISOString())
+    let { lastInsertRowid } = db.prepare(`insert into modsTable (offenderID,modID,reason,action,logID,timeOfExemption) values (?,?,?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.action,message.id,obj.time.obj?.toISOString())
 
     obj.id = lastInsertRowid
-    obj.guild.channels.cache.get(modLog).send({ 
-        embed : new modEmbed(obj) 
+    message.edit(offender.id,{ 
+        embed : new modEmbed(obj)
     })
 
 }

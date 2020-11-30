@@ -6,7 +6,7 @@ const actionsList = {
     unmute : { name : 'Unmute', a : 'mute', perm : 'MANAGE_ROLES'}
 }
 
-module.exports = new baseCommand('unmute',['unshut'],(cmd,argz,message) => {
+module.exports = new baseCommand('unmute',['unshut'],async (cmd,argz,message) => {
 
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
 
@@ -15,6 +15,7 @@ module.exports = new baseCommand('unmute',['unshut'],(cmd,argz,message) => {
     let [dbObj,...reason] = argz
     let mod = message.member
     let guild = message.guild
+    let offender
 
     reason = reason.join(' ')
     dbObj = dbObj.match(/(?=<@!?)?[0-9]{15,}(?=>)?|[1-9][0-9]{1,15}/)
@@ -26,29 +27,20 @@ module.exports = new baseCommand('unmute',['unshut'],(cmd,argz,message) => {
 
     if(!modPerm['can_mute'].includes(mod.id) && !mod.hasPermission('MANAGE_ROLES')) return message.channel.send("you don't have required perms")
 
-    guild.members.fetch(dbObj.offenderID).then(offender => {
-        console.log(dbObj)
-        if(offender.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
-        exempt({ mod, offender, guild, reason, action : 'Unmute'},dbObj,db).then(() => {
-            
-            message.channel.send( `${offender} was umuted.`)
-            console.log(process.hrtime(start))
-        })
-        
-    }).catch(err => {
-        
-        if(err.message == 'Unknown User') message.channel.send(`The given ID seems wrong.`)
-        else if(err.message == 'Unknown Member') client.users.fetch(offenderID).then(offender => {
+    try {
 
-            exempt({ mod, offender, guild, dbObj, reason, action : 'Unmute' },dbObj,db).then(() => {
-                
-                message.channel.send(`${offender.username}#${offender.discriminator} won't be muted if they rejoin.`)
-                console.log(process.hrtime(start))
-            })
+        offender = guild.members.cache.has(dbObj.offenderID) ?
+        guild.members.cache.get(dbObj.offenderID) : await client.users.fetch(dbObj.offenderID)
 
-        })
+    } catch (err) {
+
+        if(err.message == 'Unknown User') return message.channel.send(`Can not find the user.`)
         else throw err
 
-    })
+    }
+
+    if(offender?.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
+    await exempt({ mod, offender, guild, reason, action : 'Unmute'},dbObj,db)
+    message.channel.send( `${offender} was umuted.`)
 
 })

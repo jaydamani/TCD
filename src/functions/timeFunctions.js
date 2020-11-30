@@ -24,25 +24,17 @@ let units = {
 		name : 'year'
 	}
 }
+
 let array = Object.values(units).sort((a,b) => a.amount - b.amount)
 
-module.exports = function(timeArray){
-	
-	let t = 0
-	let obj
-	let string = ''
-	
-	for(let time of timeArray){
+let time2MS = time => time.match(/[0-9]+[s,m,h,d,M,y]/g)
+.reduce((a,b) => a + b.substring(0,b.length - 1)*units[b[b.length - 1]].amount,0)
 
-		let unit = units[time[time.length - 1]]
-		time = time.substring(0,time.length-1)
-		t += time*unit.amount
+let MS2String = t => {
 
-	} 
+    let string = ''
 
-	obj = new Date((new Date()).getTime() + t)
-
-	for (const a in array) {
+    for (const a in array) {
 
 		if(t <= 1000) break
 		let b = array[+a + 1] ? t % array[+a + 1].amount : t
@@ -50,8 +42,10 @@ module.exports = function(timeArray){
 		if(b != 0) string += ` ${b/array[a].amount} ${array[a].name}${b == 1 ? '' : 's'}` 
 		t -= b
 		
-	}
-	
-	return { obj, string }
+    }
+    
+    return string
 
 }
+
+module.exports = { time2MS, MS2String }

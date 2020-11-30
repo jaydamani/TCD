@@ -1,8 +1,8 @@
 const baseCommand = require('../../registry/structures/baseCommand')
+const exempt = require('../../functions/moderation/exempt')
 const { mod : { canWarn }} = config
-const { MessageEmbed } = require('discord.js')
 
-module.exports = new baseCommand('clearWarn',['unwarn'],(cmd,argz,message) => {
+module.exports = new baseCommand('clearWarn',['unwarn'],async (cmd,argz,message) => {
     
     let guild = message.guild
     let mod = message.member
@@ -15,24 +15,20 @@ module.exports = new baseCommand('clearWarn',['unwarn'],(cmd,argz,message) => {
     if(!reason) return message.channel.send('You must provide a reason')
 
     if(!warn) return message.channel.send('the given id is wrong or the warn is already cleared')
+    
+    try {
 
-    offender = client.users.fetch(warn.offenderID)
-    
-    db.prepare('begin').run()
+        let offender = guild.members.cache.has(warn.offenderID) ?
+        guild.members.cache.get(warn.offenderID) : await client.users.fetch(offenderID)
 
-    let { changes } = db.prepare(`update warnsTable set status = 0,reasonToClear = ?,unwarningModID = ${mod.id} where warnID = ${warn.warnID} limit 1`).run(reason)
-    
-    if(changes != 1){
-    
-        db.prepare('rollback').run()
-        return message.channel.send('The given ID seems incorrect')
-    
-    }else{
-    
-        db.prepare('end').run()
-        message.channel.send(`${offender.username}#${offender.discriminator}(${offender.id}) was unwarned`)
+    } catch (err) {
+        
+        if(err.message == 'Unknown User') return message.channel.send(`can not find the user`)
+        else throw err
     
     }
-    
-    
+
+    await exempt({ mod: message.member, offender, reason, action : 'unwarn', guild},warn)
+    message.channel.send(`${offender.displayName} was unwarned`)
+
 })
