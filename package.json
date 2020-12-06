@@ -1,13 +1,13 @@
 {
-  "name": "69",
+  "name": "base-discord-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/main",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ."
   },
   "keywords": [],
-  "author": "",
+  "author": "jayDamani",
   "license": "ISC",
   "dependencies": {
     "better-sqlite3": "^7.1.1",

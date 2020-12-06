@@ -13,7 +13,7 @@ const actionsList = {
 
         if(offender.roles){
 
-            offender.roles.add(muteRoleID,`muted by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time.string}.`)
+            offender.roles.add(muteRoleID,`muted by ${mod.displayName}(${mod.id}) with following reason : '${reason}'${time?.string}.`)
 
         }else{
 
@@ -37,9 +37,9 @@ module.exports = async (obj = { mod , offender, reason, time, action, guild },db
 
     let message = await obj.guild.channels.cache.get(modLog).send(obj.offender.id)
 
-    let { lastInsertRowid } = db.prepare(`insert into modsTable (offenderID,modID,reason,action,logID,timeOfExemption) values (?,?,?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.action,message.id,obj.time.obj?.toISOString())
+    let { lastInsertRowid } = db.prepare(`insert into modsTable (offenderID,modID,reason,action,logURL,timeOfExemption) values (?,?,?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.action,message.url,obj.time?.obj?.toISOString())
 
     obj.id = lastInsertRowid
-    message.edit(offender.id,new modEmbed(obj))
+    message.edit(obj.offender.id,new modEmbed(obj))
 
 }

@@ -1,6 +1,6 @@
 const moderate = require("../../functions/moderation/moderate")
-const timeConvertor = require('../../functions/timeConvertor')
-const MS2String = require('../../functions/MS2String')
+const { time2MS, MS2String} = require('../../functions/timeFunctions')
+
 
 module.exports = class cooldown {
 
@@ -35,12 +35,18 @@ module.exports = class cooldown {
                     let time
                     [action,time] = action.split(" ")
 
-                    time =  time ? timeConvertor(time.match(/[0-9]+[s,m,h,d,M,y]/g)) : { obj : null, string : ''}
-                    
+                    if(time){
+                        time = time2MS(time)
+                        time = {
+                            obj : new Date(new Date() + time),
+                            string : MS2String(time)
+                        }
+                    }                    
+
                     moderate({ offender, time, action, guild, reason : `done by automod for hitting ratelimit of ${ratelimit.amount} ${this.name} in ${MS2String(ratelimit.amount*1000)}` } )
                 
                 })
-                if(punishments.includes('delete')){
+                    if(punishments.includes('delete')){
                 
                     obj.delete()
                     obj.deleted = true

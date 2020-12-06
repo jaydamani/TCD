@@ -7,7 +7,7 @@ module.exports = new baseEvent('message',(message) => {
 	if(!message.content.startsWith(prefix)) return
 	if(message.author.bot) return
 	
-	let [command,...argz] = message.content.slice(prefix.length).trim().split(" ")
+	let [command,...argz] = message.content.slice(prefix.length).trim().split(/\s+/)
 	console.log(command,argz,client.commandMap,10)
 	
 	if(client.commandMap.has(command)){

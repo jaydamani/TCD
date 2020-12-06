@@ -15,7 +15,7 @@ module.exports = {
         //moderation stuff
         //mutes here
 
-        let mutes = db.prepare(`select * from mutesTable where status = 1 and strfTime('%s','now') > strfTime('%s',timeOfUnmute)`).all()
+        let mutes = db.prepare(`select * from modsTable where status = 1 and action = 'mute' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
 
         for (const mute of mutes) {
             
@@ -31,7 +31,7 @@ module.exports = {
 
         //handling bans here
 
-        let bans = db.prepare(`select * from bansTable where status = 0 and strfTime('%s','now') > strfTime('%s',timeOfUnban)`).all()
+        let bans = db.prepare(`select * from modsTable where status = 0 and action = 'ban' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
 
         for (const ban of bans) {
 

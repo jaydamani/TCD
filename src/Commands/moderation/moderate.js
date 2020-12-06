@@ -32,7 +32,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
 
     if(!permArrays['can_' + action.name].find(r => mod.roles.cache.keyArray().includes(r)) && !mod.hasPermission(action.perm)) return message.channel.send("you don't have required perms")
 
-    reason = reason?.join()
+    reason = reason?.join(' ')
 
     switch (action.name) {
 
@@ -42,17 +42,19 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
         
         case 'ban' :
             
-            let status = db.prepare(`select status from ${action.name}sTable where offenderID = ${offender} and status = 1 `).get()
-            if(status) return message.channel.send(`The user has already been ${action.past ?? action.name}`)
-
-            [reason,time] = reason?.split(/^((?:[0-9]+[s,m,h,d,M,y](?: |,|))+)/).reverse()
+            let status = db.prepare(`select status from modsTable where offenderID = ${offender} and status = 1 and action = '${action.name}'`).get()
+            if(status) return message.channel.send(`The user has already been ${action.past ?? action.name}`);
+            
+            ([reason,time] = reason?.split(/^((?:[0-9]+[s,m,h,d,M,y][\,, ,\s]?)+)/).reverse())
             
             if(time){
 
                     let ms = time2MS(time)
-                    time.obj = new Date(Date.now() + ms)
-                    time.string = MS2String(ms)
-                    
+                    time= { 
+                        obj : new Date(Date.now() + ms),
+                        string : MS2String(ms)
+                    }
+                    console.log(time)
             }
             break
     
@@ -74,6 +76,6 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
 
     if(offender?.roles.highest.comparePositionTo(mod.roles.highest) > 0) return message.channel.send('The offender is above mod')
     await moderate({ mod, offender, guild, time, reason, action : action.name },db)
-    message.channel.send( `${offender} was ${action.past ?? action.name + 'ed'}${time.string ? ' for' + time.string : ''}.`)
+    message.channel.send( `${offender} was ${action.past ?? action.name + 'ed'}${time ? ' for' + time.string : ''}.`)
 
 })

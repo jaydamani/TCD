@@ -8,7 +8,7 @@ const bot = require("../config/bot")
 const { registerEvents, registerCommands } = require("./registry/registry")
 
 client.commandMap = new Map()
-client.db = new require('better-sqlite3')('./ModDB.db');
+client.db = new require('better-sqlite3')('./modDB.db');
 
 (async() => {
 

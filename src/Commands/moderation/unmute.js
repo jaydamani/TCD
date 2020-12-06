@@ -22,7 +22,7 @@ module.exports = new baseCommand('unmute',['unshut'],async (cmd,argz,message) =>
 
     if(!dbObj) return message.channel.send('The given ID seems wrong.')
     if(!reason) return message.channel.send('Please specify a reason') 
-    dbObj = db.prepare(`select * from mutesTable where offenderID = '${dbObj[0]}' and status = 1 limit 1`).get()
+    dbObj = db.prepare(`select * from modsTable where offenderID = '${dbObj[0]}' and status = 1 and action = 'mute' limit 1`).get()
     if(!dbObj) return message.channel.send('The given ID is wrong or the user is no longer muted')
 
     if(!modPerm['can_mute'].includes(mod.id) && !mod.hasPermission('MANAGE_ROLES')) return message.channel.send("you don't have required perms")

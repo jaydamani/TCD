@@ -6,7 +6,7 @@ module.exports = class modEmbed extends MessageEmbed{
         super({
             type : 'rich',
             description: ``,
-            timestamp : time ? time.obj : new Date(),
+            timestamp : time?.obj,
             color : ``,
             fields : [
                 {
@@ -36,7 +36,7 @@ module.exports = class modEmbed extends MessageEmbed{
                     inline : true
                 },{
                     name : `Time Of ${action} :`,
-                    value : time.string ?? 'Indefinitely',
+                    value : time?.string ?? 'Indefinitely',
                     inline : true
                 },{
                     name : `Reason :`,
