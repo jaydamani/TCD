@@ -6,21 +6,21 @@ module.exports = new baseEvent('messageReactionRemove',(reaction, user) => {
     if(!reactionRoles.hasOwnProperty(reaction.message.id)) return
 
     reactionRoles = reactionRoles[reaction.message.id]
-    if(!reactionRoles.hasOwnProperty(`${reaction.name}:${reaction.id}`)) return
+    if(!reactionRoles.hasOwnProperty(reaction.emoji.id ?? reaction.emoji.name)) return
 
-    reactionRoles = reactionRoles[reaction.name + reaction.id]
+    reactionRoles = reactionRoles[reaction.emoji.id ?? reaction.emoji.name]
     let rolesToAdd = ''
     let rolesToRemove = ''
-    let member = reaction.message.guild.members.cache.has(user.id)
+    let member = reaction.message.guild.members.cache.get(user.id)
 
-     reactionRole.forEach((obj) => {
+     reactionRoles.forEach((obj) => {
 
         if(obj.onRemoval) rolesToAdd += obj.roles
-        else if(obj.onRemoval == 0) rolesToRemove += obj.rolesToAdd
+        else if(obj.onRemoval == 0) rolesToRemove += obj.roles
 
     })
 
-    member?.roles.add(rolesToAdd.split())
-    member?.roles.remove(rolesToRemove.split())
+    if(rolesToAdd) member?.roles.add(rolesToAdd.split())
+    if(rolesToRemove) member?.roles.remove(rolesToRemove.split())
 
 })

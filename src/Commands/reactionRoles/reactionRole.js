@@ -20,7 +20,12 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
     
     try {
 
-        rrMessage = await channel.messages.fetch(rrMessage)
+        rrMessage = await channel.messages.fetch(rrMessage).catch(err => {
+
+            if(err.message == 'Unknown Message') message.channel.send('can not find message')
+            else throw err
+
+        })
 
     } catch (err) {
         
@@ -64,8 +69,8 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
         if(!roles) return message.channel.send(`no roles for ${reaction}`)
 
         rrMessage.react(reactionObj.id ?? reactionObj.name)
-        array.push({ messageID : rrMessage.id, roles, reaction, reactionObj, onReaction : 1, onRemoval : 0})
-        embed.addField('\u200b',`${reaction}\t: <@${roles.replace(',','>,<@')}>` ?? '\u200b',true)
+        array.push({ messageID : rrMessage.id, roles, reaction : reactionObj.id ?? reactionObj.name, onReaction : 1, onRemoval : 0})
+        embed.addField('\u200b',`${reaction}\t: <@&${roles.replace(',','>,<@&')}>` ?? '\u200b',true)
 
     }
 
@@ -94,13 +99,13 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
                 if(result = a.find(r => r.onRemoval == obj.onReaction && r.onReaction == obj.onRemoval)){
 
                     result.roles += obj[reaction].roles
-                    db.prepare(`update reactionRoles set roles = ${result.roles} where messageID = @messageID and reaction = @reaction and onReaction = @onReaction and onRemoval = @onRemoval`,obj)
+                    db.prepare(`update reactionRoles set roles = ${result.roles} where messageID = @messageID and reaction = @reaction and onReaction = @onReaction and onRemoval = @onRemoval`,obj).run()
 
                 } 
                 else{
 
-                    array.push(obj[reaction])
-                    dbArray.push(`(${obj.messageID},${obj.reaction},${obj.roles},${obj.onReaction},${obj.onRemoval})`)
+                    a.push(obj)
+                    dbArray.push(`('${obj.messageID}','${obj.reaction}','${obj.roles}','${obj.onReaction}','${obj.onRemoval}')`)
 
                 }
 
@@ -112,11 +117,11 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
         else{
 
             reactionRoles[rrMessage.id] = array.reduce((x,y) => (x[y.reaction] ??= []).push(y), {})
-            db.prepare(`insert into reactionRoles values ${array.map(obj => `(${obj.messageID},${obj.reaction},${obj.roles},${obj.onReaction},${obj.onRemoval})`).join()}`).run()
+            db.prepare(`insert into reactionRoles values ${array.map(obj => `('${obj.messageID}','${obj.reaction}','${obj.roles}','${obj.onReaction}','${obj.onRemoval}')`).join()}`).run()
 
         }
-
-        array.forEach((a,i) => setTimeout(message.react,1000*i,a.reactionObj.name ?? a.reactionObj.id))
+        console.log(array)
+        array.forEach((a,i) => setTimeout(console.log,1000*i, a))
 
     })
 

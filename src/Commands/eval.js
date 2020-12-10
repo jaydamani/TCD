@@ -4,7 +4,7 @@ const discord = require("discord.js")
 
 module.exports = new baseCommand('eval',['run'],async (cmd,argz,message) => {
 
-    if(!canEval.includes(message.author.id) && message.author.id != `429606655320391680`) return message.channel.send(`lol, noob`)
+    if(!canEval?.includes(message.author.id) && message.author.id != `429606655320391680`) return message.channel.send(`lol, noob`)
 
     let code = argz.join(' ')
     let start = process.hrtime();
@@ -14,7 +14,7 @@ module.exports = new baseCommand('eval',['run'],async (cmd,argz,message) => {
             message.channel.send({
                 
                 embed : new discord.MessageEmbed()
-                .setDescription(JSON.stringify(a))
+                .setDescription(JSON.stringify(a,null,3))
                 .setFooter(process.hrtime(start))
 
             })
