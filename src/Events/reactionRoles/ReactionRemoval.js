@@ -17,10 +17,10 @@ module.exports = new baseEvent('messageReactionRemove',(reaction, user) => {
 
         if(obj.onRemoval) rolesToAdd += obj.roles
         else if(obj.onRemoval == 0) rolesToRemove += obj.rolesToAdd
-    
+
     })
 
-    member.roles.add(rolesToAdd.split())
-    member.roles.remove(rolesToRemove.split())
+    member?.roles.add(rolesToAdd.split())
+    member?.roles.remove(rolesToRemove.split())
 
 })

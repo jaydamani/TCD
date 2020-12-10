@@ -5,21 +5,13 @@ module.exports = new baseEvent('ready',() => {
     let dbObj = client.db.prepare('select * from reactionRoles').all()
 
     let reactionRoles = client.reactionRoles = {}
+
     dbObj.forEach((obj) => {
 
-        if(reactionRoles.hasOwnProperty(obj.messageID)){
+        let array = ((reactionRoles[obj.messageID] ??= {})[obj.reaction] ??= [])
 
-            if(reactionRoles[obj.messageID].hasOwnProperty(obj.reaction))
-            reactionRoles[obj.messageID][obj.reaction].push(obj)
-            else reactionRoles[obj.messageID][obj.reaction] = [obj]
-
-        }
-        else{
-
-            reactionRoles[obj.messageID] = {}
-            reactionRoles[obj.messageID][obj.reaction] = [obj]
-
-        }
+        if(result = array.find(r => r.onRemoval == obj.onReaction && r.onReaction == obj.onRemoval)) result.roles += obj[reaction].roles
+        else array.push(obj[reaction])
 
     })
 

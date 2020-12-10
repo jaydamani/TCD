@@ -1,5 +1,5 @@
 const baseCommand = require('../../registry/structures/baseCommand');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Util : { parseEmoji } } = require('discord.js');
 
 module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
@@ -29,8 +29,8 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
     }
 
-    let rrArray = (argz.join(' ').split(/<:.+:([0-9]{15,})> |(\p{So}) /u)).filter(r => r)
-    let obj = {}
+    let rrArray = (argz.join(' ').split(/(<a?:.+:[0-9]{15,}>) |(\p{S}) /u)).filter(r => r)
+    let array = []
     let embed = new MessageEmbed({
 
         title : 'Reaction Roles',
@@ -38,69 +38,85 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
         color : 'random'
 
     })
-    console.log(rrArray,69)
+
     for (let i = 1; i <= rrArray.length/2; i++) {
-        
+
         let reaction = rrArray[2 * i - 2]
         let roles = rrArray[2 * i - 1].split()
-        
-       roles = roles.map(rInput => {
+        let reactionObj = parseEmoji(reaction)
+
+        if(reactionObj.id && !client.emojis.cache.has(reactionObj.id)) return message.channel.send('bot can not access the given emoji.')
+
+        roles = roles.map(rInput => {
 
             let role = guild.roles.cache.find(r => rInput == `<@&${r.id}>` || r.name.toLowerCase().includes(rInput.toLowerCase()) || r.id == rInput)
             if(!role){
-                console.log(role,'no role')
-                
+
                 message.channel.send(`Can not resolve "${rInput}", so it will be skipped`)
                 return undefined
 
             }
-            console.log(role)
+
             return role
-        
-        }).filter(r => r).map(r => r.id)
+
+        }).filter(r => r).map(r => r.id).join()
         console.log(roles,roles.length)
-        if(roles.length == 0) return message.channel.send(`no roles for ${reaction}`)
-        
-        obj[reaction] = { roles, reaction, onReaction : 1, onRemoval : 0}
-        embed.addField(`:${reaction}: :`,roles.map(r => `<&r.id>`).join(' ') ?? '\u200b',true)
+        if(!roles) return message.channel.send(`no roles for ${reaction}`)
+
+        rrMessage.react(reactionObj.id ?? reactionObj.name)
+        array.push({ messageID : rrMessage.id, roles, reaction, reactionObj, onReaction : 1, onRemoval : 0})
+        embed.addField('\u200b',`${reaction}\t: <@${roles.replace(',','>,<@')}>` ?? '\u200b',true)
 
     }
-    
-    if(obj == {}) return message.channel.send(`no reaction roles resolved`)
 
+    if(!array.length) return message.channel.send(`no reaction roles resolved`)
+    console.log(array)
     message = await message.channel.send({ embed })
     await message.react('\u2705')
-    await message.react('\u274c')
+    //setTimeout(() => message.react('\u274c'),1000)
+    console.log('ratelimit?')
 
-    let collector = message.createReactionCollector((reaction,user) => user.id == message.author.id,{ })
+    let collector = message.createReactionCollector(() => true)
 
     collector.on('collect',(reaction, user) => {
-        console.log('collected!!!!!!',user.name,reaction.na)
+        console.log('collected!!!!!!',user.username,reaction.id ?? reaction.name)
 
-        if(reaction.name == '\u274c') return message.channel.send('Command cancelled')
         let reactionRoles = client.reactionRoles
 
         if(reactionRoles[rrMessage.id]){
 
-            for (const reaction in obj) {
+            let dbArray = []
 
-                if(reactionRoles[rrMessage.id][reaction]){
-                    console.log(reactionRoles[rrMessage.id],reaction)
-                    if(result = reactionRoles[rrMessage.id][reaction]){
+            array.forEach((obj) => {
 
-                        if(a = result?.find()) a.roles = a.roles.concat(obj[reaction].roles)
-                        else result.push(obj[reaction])
+                let a = (reactionRoles[rrMessage.id][obj.reaction] ??= [])
 
-                    }
-                    else reactionRoles[rrMessage.id][reaction] = [obj[reaction]]
+                if(result = a.find(r => r.onRemoval == obj.onReaction && r.onReaction == obj.onRemoval)){
+
+                    result.roles += obj[reaction].roles
+                    db.prepare(`update reactionRoles set roles = ${result.roles} where messageID = @messageID and reaction = @reaction and onReaction = @onReaction and onRemoval = @onRemoval`,obj)
+
+                } 
+                else{
+
+                    array.push(obj[reaction])
+                    dbArray.push(`(${obj.messageID},${obj.reaction},${obj.roles},${obj.onReaction},${obj.onRemoval})`)
 
                 }
-                else reactionRoles[rrMessage.id][reaction] = [obj[reaction]]
 
-            } 
+            })
+
+            if(dbArray.length) db.prepare(`insert into reactionRoles values ${dbArray.join()}`)
 
         }
-        else reactionRoles[rrMessage.id] = obj
+        else{
+
+            reactionRoles[rrMessage.id] = array.reduce((x,y) => (x[y.reaction] ??= []).push(y), {})
+            db.prepare(`insert into reactionRoles values ${array.map(obj => `(${obj.messageID},${obj.reaction},${obj.roles},${obj.onReaction},${obj.onRemoval})`).join()}`).run()
+
+        }
+
+        array.forEach((a,i) => setTimeout(message.react,1000*i,a.reactionObj.name ?? a.reactionObj.id))
 
     })
 
