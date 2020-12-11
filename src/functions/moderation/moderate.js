@@ -30,7 +30,7 @@ const actionsList = {
 
 }
 
-module.exports = async (obj = { mod , offender, reason, time, action, guild },db = new require('better-sqlite3')('./ModDB.db')) => {
+module.exports = async (obj = { mod , offender, reason, time, action, guild },db = client.db) => {
 
     obj.mod = obj.mod || obj.guild.me
     actionsList[obj.action](obj,db)
