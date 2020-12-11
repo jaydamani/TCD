@@ -10,6 +10,7 @@
   "author": "jayDamani",
   "license": "ISC",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "better-sqlite3": "^7.1.1",
     "discord.js": "^12.5.1"
   }
