@@ -3,6 +3,7 @@ const { MessageEmbed, Util : { parseEmoji } } = require('discord.js');
 
 module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
+    if(argz.length < 3) return message.channel.send('Not enough argz')
     if(!message.member.hasPermission(8)) return message.channel.send('You do not have required permissions')
 
     let db = client.db
@@ -20,17 +21,12 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
     
     try {
 
-        rrMessage = await channel.messages.fetch(rrMessage).catch(err => {
-
-            if(err.message == 'Unknown Message') message.channel.send('can not find message')
-            else throw err
-
-        })
+        rrMessage = await channel.messages.fetch(rrMessage)
 
     } catch (err) {
         
-        if(err.message == 'Unknown Message') return message.channel.send('Can not find the given message')
-        else throw err
+        if(err.message == 'Unknown Message' || err.message == `Invalid Form Body\nmessage_id: Value "jfkfgj" is not snowflake.`) return message.channel.send('Can not find the given message')
+        else return console.log(err.message,Object.getOwnPropertyNames(err))
 
     }
 
