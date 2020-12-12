@@ -20,8 +20,8 @@ async function registerCommands(dir){
 
 			if(cmd.constructor !== baseCommand) continue
 			
-			client.commandMap.set(cmd.name,cmd.code)
-			cmd.alias.forEach(alias => client.commandMap.set(alias, cmd.code))
+			if(cmd.name) client.commandMap.set(cmd.name,cmd.code)
+			cmd.alias?.forEach(alias => client.commandMap.set(alias, cmd.code))
 
 		}
 
