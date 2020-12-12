@@ -1,5 +1,6 @@
 {
 	"id" : "727853079029874740",
+	"imageCommands" : ["cat","dog","birch","oldGuy"],
 	"rr" : {
 		"can_rr" : [],
 		"channel"  : ""
