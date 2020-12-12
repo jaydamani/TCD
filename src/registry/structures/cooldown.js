@@ -34,11 +34,10 @@ module.exports = class cooldown {
                     [action,time] = action.split(" ")
 
                     if(time){
+
                         time = time2MS(time)
-                        time = {
-                            obj : new Date(new Date() + time),
-                            string : MS2String(time)
-                        }
+                        time = { ms : time, string : MS2String(time) }
+
                     }                    
 
                     moderate({ offender, time, action, guild, reason : `done by automod for hitting ratelimit of ${ratelimit.amount} ${this.name} in ${MS2String(ratelimit.amount*1000)}` } )
@@ -51,10 +50,12 @@ module.exports = class cooldown {
 
                 }
                 else if(punishments.includes('deleteAll')){
-                    
+
                     arr.filter(obj => !obj.deleted).forEach(obj => {
+
                         obj.delete()
                         obj.deleted = true
+
                     })
 
                 }
@@ -64,6 +65,7 @@ module.exports = class cooldown {
         }
 
         const ratelimit = this.ratelimits[this.ratelimits.length - 1]
+
         if(ratelimit.amount < arr.length || ratelimit.time*1000 < arr[arr.length - 1]._time - arr[0]._time)
         arr.shift()
 

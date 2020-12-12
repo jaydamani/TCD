@@ -39,25 +39,22 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
         case 'mute' :
 
             action.past = 'muted'
-        
+
         case 'ban' :
-            
+
             const status = db.prepare(`select status from modsTable where offenderID = ${offender} and status = 1 and action = '${action.name}'`).get()
             if(status) return message.channel.send(`The user has already been ${action.past ?? action.name}`);
-            
+
             ([reason,time] = reason?.split(/^((?:[0-9]+[s,m,h,d,M,y][\,, ,\s]?)+)/).reverse())
-            
+
             if(time){
 
                     const ms = time2MS(time)
-                    time= { 
-                        obj : new Date(Date.now() + ms),
-                        string : MS2String(ms)
-                    }
-                    console.log(time)
+                    time = { ms, string : MS2String(ms) }
+
             }
             break
-    
+
     }
 
     if(!reason) return message.channel.send('Please specify a reason') 
@@ -68,7 +65,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
         guild.members.cache.get(offender) : await client.users.fetch(offender)
 
     } catch (err) {
-        
+
         if(err.message == 'Unknown User') return message.channel.send(`Can not find the user.`)
         else throw err
 
