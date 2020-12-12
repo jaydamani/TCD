@@ -1,5 +1,5 @@
-let baseEvent = require("../registry/structures/baseEvent")
-let prefix = "-"
+const baseEvent = require("../registry/structures/baseEvent")
+const prefix = "-"
 
 module.exports = new baseEvent('message',(message) => {
 
@@ -7,8 +7,7 @@ module.exports = new baseEvent('message',(message) => {
 	if(!message.content.startsWith(prefix)) return
 	if(message.author.bot) return
 	
-	let [command,...argz] = message.content.slice(prefix.length).trim().split(/\s+/)
-	console.log(command,argz,client.commandMap,10)
+	const [command,...argz] = message.content.slice(prefix.length).trim().split(/\s+/)
 	
 	if(client.commandMap.has(command)){
 		
@@ -17,8 +16,6 @@ module.exports = new baseEvent('message',(message) => {
 			client.commandMap.get(command)(command,argz,message)
 		
 		} catch (err) {
-
-			console.error(err)
 
 			message.channel.send(`There was some unknown error but don't worry the dev has been informed`)
 			

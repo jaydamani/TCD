@@ -3,15 +3,15 @@ const baseEvent = require("../../../registry/structures/baseEvent")
 const { logs : { roleUpdateChannelID : logChannel }} = require('../../../../config/guild.json')
 
 module.exports = new baseEvent('roleDelete',async (r) => {
-    let db = client.db
 
-    let { changes }  = db.prepare(`update roles set roleIDs = replace(roleIDs,${r.id},'') where roleIDs like ${r.id}`).run()    
+    const db = client.db
 
-    let a = await r.guild.fetchAuditLogs({ type : 32,limit : 1})
-    let { executor } = a.entries.first()
-    console.log(executor)
+    const { changes }  = db.prepare(`update roles set roleIDs = replace(roleIDs,${r.id},'') where roleIDs like ${r.id}`).run()    
 
-    let embed = new MessageEmbed()
+    const a = await r.guild.fetchAuditLogs({ type : 32,limit : 1})
+    const { executor } = a.entries.first()
+
+    const embed = new MessageEmbed()
     .setTitle('Role Deleted')
     .setColor(r.hexColor)
     .addField('Name :',r.name,true)
@@ -24,4 +24,5 @@ module.exports = new baseEvent('roleDelete',async (r) => {
     .setTimestamp()
 
     r.guild.channels.cache.get(logChannel).send({ embed })
+
 })

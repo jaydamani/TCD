@@ -1,4 +1,4 @@
-let baseCommand = require('../registry/structures/baseCommand')
+const baseCommand = require('../registry/structures/baseCommand')
 module.exports = new baseCommand("say",[],(cmdName,argz,message) => {
 
 	if(message.member.hasPermission("ADMINISTRATOR")) message.channel.send(argz.join(" "))

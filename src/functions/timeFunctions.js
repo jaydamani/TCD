@@ -1,4 +1,4 @@
-let units = {
+const units = {
 	s :{
 		amount : 1000,
 		name : 'second'
@@ -25,12 +25,12 @@ let units = {
 	}
 }
 
-let array = Object.values(units).sort((a,b) => a.amount - b.amount)
+const array = Object.values(units).sort((a,b) => a.amount - b.amount)
 
-let time2MS = time => time.match(/[0-9]+[s,m,h,d,M,y]/g)
+const time2MS = time => time.match(/[0-9]+[s,m,h,d,M,y]/g)
 .reduce((a,b) => a + b.substring(0,b.length - 1)*units[b[b.length - 1]].amount,0)
 
-let MS2String = t => {
+const MS2String = t => {
 
     let string = ''
 
@@ -38,12 +38,12 @@ let MS2String = t => {
 
 		if(t <= 1000) break
 		let b = array[+a + 1] ? t % array[+a + 1].amount : t
-		
+
 		if(b != 0) string += ` ${b/array[a].amount} ${array[a].name}${b == 1 ? '' : 's'}` 
 		t -= b
-		
+
     }
-    
+
     return string
 
 }

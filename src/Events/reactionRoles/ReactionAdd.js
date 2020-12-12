@@ -2,7 +2,7 @@ const baseEvent = require('../../registry/structures/baseEvent');
 
 module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
 
-    let reactionRoles = client.reactionRoles
+    const reactionRoles = client.reactionRoles
     if(!reactionRoles.hasOwnProperty(reaction.message.id)) return
 
     reactionRoles = reactionRoles[reaction.message.id]
@@ -12,7 +12,7 @@ module.exports = new baseEvent('messageReactionAdd',(reaction, user) => {
 
     let rolesToAdd = ''
     let rolesToRemove = ''
-    let member = reaction.message.guild.members.cache.get(user.id)
+    const member = reaction.message.guild.members.cache.get(user.id)
 
     reactionRoles.forEach((obj) => {
 

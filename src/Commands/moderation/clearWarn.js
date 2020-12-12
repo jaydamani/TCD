@@ -4,11 +4,12 @@ const { mod : { canWarn }} = config
 
 module.exports = new baseCommand('clearWarn',['unwarn'],async (cmd,argz,message) => {
     
-    let guild = message.guild
-    let mod = message.member
-    let db = client.db
-    let warn = db.prepare('select * from warnsTable where warnID = ? and status = 1').get(warn)   
-    let reason = argz.join(" ")
+    const guild = message.guild
+    const mod = message.member
+    const db = client.db
+    const warn = db.prepare('select * from warnsTable where warnID = ? and status = 1').get(warn)   
+    const reason = argz.join(" ")
+    let offender
 
     if(!canWarn.includes(mod.id) && !mod.hasPermission(8)) return message.channel.send(`you don't have enough perms`)
 
@@ -18,7 +19,7 @@ module.exports = new baseCommand('clearWarn',['unwarn'],async (cmd,argz,message)
     
     try {
 
-        let offender = guild.members.cache.has(warn.offenderID) ?
+        offender = guild.members.cache.has(warn.offenderID) ?
         guild.members.cache.get(warn.offenderID) : await client.users.fetch(offenderID)
 
     } catch (err) {

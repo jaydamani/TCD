@@ -10,11 +10,10 @@ module.exports = new baseCommand('unmute',['unshut'],async (cmd,argz,message) =>
 
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
 
-    let start = process.hrtime()
-    let db = client.db
+    const db = client.db
     let [dbObj,...reason] = argz
-    let mod = message.member
-    let guild = message.guild
+    const mod = message.member
+    const guild = message.guild
     let offender
 
     reason = reason.join(' ')

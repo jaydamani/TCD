@@ -6,8 +6,8 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
     if(argz.length < 3) return message.channel.send('Not enough argz')
     if(!message.member.hasPermission(8)) return message.channel.send('You do not have required permissions')
 
-    let db = client.db
-    let guild = message.guild
+    const db = client.db
+    const guild = message.guild
     let rrMessage = argz.shift()
     let channel = argz[0]
 
@@ -30,9 +30,9 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
     }
 
-    let rrArray = (argz.join(' ').split(/(<a?:.+:[0-9]{15,}>) |(\p{S}) /u)).filter(r => r)
-    let array = []
-    let embed = new MessageEmbed({
+    const rrArray = (argz.join(' ').split(/(<a?:.+:[0-9]{15,}>) |(\p{S}) /u)).filter(r => r)
+    const array = []
+    const embed = new MessageEmbed({
 
         title : 'Reaction Roles',
         description : `This are the reactions and roles below them will be given if someone reacts with the given reaction to https://discord.com/${guild.id}/${channel.id}/${rrMessage.id}\nReact with \u2705 to confirm and \u274c to deny`,
@@ -42,15 +42,15 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
     for (let i = 1; i <= rrArray.length/2; i++) {
 
-        let reaction = rrArray[2 * i - 2]
+        const reaction = rrArray[2 * i - 2]
         let roles = rrArray[2 * i - 1].split()
-        let reactionObj = parseEmoji(reaction)
+        const reactionObj = parseEmoji(reaction)
 
         if(reactionObj.id && !client.emojis.cache.has(reactionObj.id)) return message.channel.send('bot can not access the given emoji.')
 
         roles = roles.map(rInput => {
 
-            let role = guild.roles.cache.find(r => rInput == `<@&${r.id}>` || r.name.toLowerCase().includes(rInput.toLowerCase()) || r.id == rInput)
+            const role = guild.roles.cache.find(r => rInput == `<@&${r.id}>` || r.name.toLowerCase().includes(rInput.toLowerCase()) || r.id == rInput)
             if(!role){
 
                 message.channel.send(`Can not resolve "${rInput}", so it will be skipped`)
@@ -61,7 +61,7 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
             return role
 
         }).filter(r => r).map(r => r.id).join()
-        console.log(roles,roles.length)
+
         if(!roles) return message.channel.send(`no roles for ${reaction}`)
 
         rrMessage.react(reactionObj.id ?? reactionObj.name)
@@ -71,26 +71,24 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
     }
 
     if(!array.length) return message.channel.send(`no reaction roles resolved`)
-    console.log(array)
+
     message = await message.channel.send({ embed })
     await message.react('\u2705')
-    //setTimeout(() => message.react('\u274c'),1000)
-    console.log('ratelimit?')
 
-    let collector = message.createReactionCollector(() => true)
+    const collector = message.createReactionCollector(() => true)
 
     collector.on('collect',(reaction, user) => {
         console.log('collected!!!!!!',user.username,reaction.id ?? reaction.name)
 
-        let reactionRoles = client.reactionRoles
+        const reactionRoles = client.reactionRoles
 
         if(reactionRoles[rrMessage.id]){
 
-            let dbArray = []
+            const dbArray = []
 
             array.forEach((obj) => {
 
-                let a = (reactionRoles[rrMessage.id][obj.reaction] ??= [])
+                const a = (reactionRoles[rrMessage.id][obj.reaction] ??= [])
 
                 if(result = a.find(r => r.onRemoval == obj.onReaction && r.onReaction == obj.onRemoval)){
 
@@ -116,7 +114,6 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
             db.prepare(`insert into reactionRoles values ${array.map(obj => `('${obj.messageID}','${obj.reaction}','${obj.roles}','${obj.onReaction}','${obj.onRemoval}')`).join()}`).run()
 
         }
-        console.log(array)
         array.forEach((a,i) => setTimeout(console.log,1000*i, a))
 
     })

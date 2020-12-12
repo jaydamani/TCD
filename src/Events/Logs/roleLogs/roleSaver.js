@@ -1,19 +1,29 @@
 const baseEvent = require("../../../registry/structures/baseEvent");
 let { logs : { memberUpdateChannelID } } = require('../../../../config/guild.json')
-
+const { MessageEmbed } = require('discord.js')
 module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
-    
-    let guild = oldMember.guild
-    
-    if(oldMember.displayName != newMember.displayName) console.log(oldMember.displayName,",",newMember.displayName)
-    
-    let rolesRemoved = oldMember.roles.cache.filter(m => !newMember.roles.cache.has(m.id))
-    let rolesAdded = newMember.roles.cache.filter(m => !oldMember.roles.cache.has(m.id))
-    
-    console.log(rolesAdded.keyArray(),rolesRemoved.keyArray(),696969)
-    
-    let db = client.db
-    db.prepare('update roles set roleIDs = ?, position = ? where memberID = ?')
-    .run(newMember.roles.cache.keyArray().join(),newMember.roles.highest.rawPosition,newMember.id)
+
+    memberUpdateChannelID = oldMember.guild.roles.resolve(memberUpdateChannelID)
+    const guild = oldMember.guild    
+    const rolesRemoved = oldMember.roles.cache.filter(m => !newMember.roles.cache.has(m.id))
+    const rolesAdded = newMember.roles.cache.filter(m => !oldMember.roles.cache.has(m.id))
+    const db = client.db
+    const query = db.prepare('update roles set roleIDs = ? where memberID = ?')
+    const embed = new MessageEmbed({ title : `Roles updated for $(newMember)` })
+
+    if(rolesRemoved.size){
+
+    	query.run(newMember.roles.cache.keyArray().join(), newMember.id)
+
+	    memberUpdateChannelID.send({ embed : embed.addField('Roles removed :', rolesRemoved.valuesArray.join())})
+
+    }
+    if(rolesAdded.size){
+
+	    query.run(newMember.roles.cache.keyArray().join(), newMember.id)
+
+	    memberUpdateChannelID.send({ embed : embed.addField('Roles added :', rolesRemoved.valuesArray.join())})
+
+    }
 
 })

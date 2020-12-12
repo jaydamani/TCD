@@ -1,13 +1,13 @@
-let fs = require("fs")
-let path = require("path")
-let baseEvent = require("./structures/baseEvent")
-let baseCommand = require("./structures/baseCommand")
+const fs = require("fs")
+const path = require("path")
+const baseEvent = require("./structures/baseEvent")
+const baseCommand = require("./structures/baseCommand")
 
 async function registerCommands(dir){
 
-	let files = await fs.promises.readdir(dir,{withFileTypes : true})
+	const files = await fs.promises.readdir(dir,{withFileTypes : true})
 	
-	for(let file of files){
+	for(const file of files){
 
 		if(file.isDirectory()){
 			registerCommands(path.join(dir,file.name))
@@ -16,7 +16,7 @@ async function registerCommands(dir){
 
 		if(file.name.endsWith(".js")){
 
-			let cmd = require("../../" + path.join(dir,file.name))
+			const cmd = require("../../" + path.join(dir,file.name))
 
 			if(cmd.constructor !== baseCommand) continue
 			
@@ -35,9 +35,9 @@ async function registerEvents(dirPath){
 
 	async function registerFiles(dir){
 
-		let files = await fs.promises.readdir(dir,{withFileTypes : true})
+		const files = await fs.promises.readdir(dir,{withFileTypes : true})
 		
-		for(let file of files){
+		for(const file of files){
 
 			if(file.isDirectory()){
 				await registerFiles(path.join(dir,file.name))
@@ -58,7 +58,7 @@ async function registerEvents(dirPath){
 	}
 
 	await registerFiles(dirPath)
-	for(let eventArray of eventsMap){
+	for(const eventArray of eventsMap){
 
 		client.on(eventArray[0],(...params) =>{
 

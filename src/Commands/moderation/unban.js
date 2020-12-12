@@ -6,8 +6,8 @@ module.exports = new baseCommand('unban',[],(cmd,argz,message) => {
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
 
     let [offenderID,...reason] = argz
-    let mod = message.member
-    let guild = message.guild
+    const mod = message.member
+    const guild = message.guild
 
     reason = reason.join(' ')
 
@@ -16,7 +16,6 @@ module.exports = new baseCommand('unban',[],(cmd,argz,message) => {
     if(!offenderID) return message.channel.send('The given ID seems wrong.')
     if(!reason) return message.channel.send('Please specify a reason') 
     offenderID = offenderID[1]
-
 
     if(!can_ban.includes(mod.id) && !mod.hasPermission('manage_roles')) return message.channel.send("you don't have required perms")
 

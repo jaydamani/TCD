@@ -9,13 +9,13 @@ const func = (dbObj,action,guild) => offender => {
 module.exports = {
     run : () => setInterval(() => {
     
-    let guild = client.guilds.cache.get("727853079029874740")
-    let db = client.db
+    const guild = client.guilds.cache.get("727853079029874740")
+    const db = client.db
 
         //moderation stuff
         //mutes here
 
-        let mutes = db.prepare(`select * from modsTable where status = 1 and action = 'mute' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
+        const mutes = db.prepare(`select * from modsTable where status = 1 and action = 'mute' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
 
         for (const mute of mutes) {
             
@@ -31,7 +31,7 @@ module.exports = {
 
         //handling bans here
 
-        let bans = db.prepare(`select * from modsTable where status = 0 and action = 'ban' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
+        const bans = db.prepare(`select * from modsTable where status = 0 and action = 'ban' and strfTime('%s','now') > strfTime('%s',timeOfExemption)`).all()
 
         for (const ban of bans) {
 

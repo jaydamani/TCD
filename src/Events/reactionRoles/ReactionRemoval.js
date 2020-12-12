@@ -2,7 +2,7 @@ const baseEvent = require('../../registry/structures/baseEvent');
 
 module.exports = new baseEvent('messageReactionRemove',(reaction, user) => {
 
-    let reactionRoles = client.reactionRoles
+    const reactionRoles = client.reactionRoles
     if(!reactionRoles.hasOwnProperty(reaction.message.id)) return
 
     reactionRoles = reactionRoles[reaction.message.id]

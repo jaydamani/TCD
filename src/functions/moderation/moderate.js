@@ -36,7 +36,6 @@ module.exports = async (obj = { mod , offender, reason, time, action, guild },db
     actionsList[obj.action](obj,db)
 
     let message = await obj.guild.channels.cache.get(modLog).send(obj.offender.id)
-
     let { lastInsertRowid } = db.prepare(`insert into modsTable (offenderID,modID,reason,action,logURL,timeOfExemption) values (?,?,?,?,?,?)`).run(obj.offender.id,obj.mod.id,obj.reason,obj.action,message.url,obj.time?.obj?.toISOString())
 
     obj.id = lastInsertRowid

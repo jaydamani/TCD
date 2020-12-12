@@ -21,7 +21,7 @@ const actionsList = {
 
 module.exports = async (obj = { mod , offender, reason, action, guild},dbObj) => {
 
-    let db = client.db
+    const db = client.db
     if(!dbObj) dbObj = db.prepare(`select * from ${obj.action.substring(2)}sTable where offenderID = ${obj.offender.id} and status = 1`).get()
     obj.mod = obj.mod ?? obj.guild.me
     obj.id = dbObj.ID

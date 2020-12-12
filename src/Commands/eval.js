@@ -6,8 +6,8 @@ module.exports = new baseCommand('eval',['run'],async (cmd,argz,message) => {
 
     if(!canEval?.includes(message.author.id) && message.author.id != `429606655320391680`) return message.channel.send(`lol, noob`)
 
-    let code = argz.join(' ')
-    let start = process.hrtime();
+    const code = argz.join(' ')
+    const start = process.hrtime();
 
         (new Promise(r => r(eval(code)))).then(a => {
 

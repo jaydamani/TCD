@@ -18,12 +18,12 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
 
     if(argz.length < 2) return message.channel.send('not enough argz')
 
-    let action = obj[cmd.toLowerCase()]
+    const action = obj[cmd.toLowerCase()]
     let [offender,...reason] = argz
     let time
-    let mod = message.member
-    let guild = message.guild
-    let db = client.db
+    const mod = message.member
+    const guild = message.guild
+    const db = client.db
 
     offender = offender.match(/(?=<@!?)?([0-9]{15,})>?/)
 
@@ -42,14 +42,14 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
         
         case 'ban' :
             
-            let status = db.prepare(`select status from modsTable where offenderID = ${offender} and status = 1 and action = '${action.name}'`).get()
+            const status = db.prepare(`select status from modsTable where offenderID = ${offender} and status = 1 and action = '${action.name}'`).get()
             if(status) return message.channel.send(`The user has already been ${action.past ?? action.name}`);
             
             ([reason,time] = reason?.split(/^((?:[0-9]+[s,m,h,d,M,y][\,, ,\s]?)+)/).reverse())
             
             if(time){
 
-                    let ms = time2MS(time)
+                    const ms = time2MS(time)
                     time= { 
                         obj : new Date(Date.now() + ms),
                         string : MS2String(ms)
