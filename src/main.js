@@ -9,6 +9,7 @@ const { registerEvents, registerCommands } = require("./registry/registry")
 
 client.commandMap = new Map()
 client.db = new require('better-sqlite3')('./modDB.db');
+db.function('get',(a,b,c) => client[a].get(b)[c])
 
 (async() => {
 

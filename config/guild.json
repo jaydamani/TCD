@@ -1,6 +1,11 @@
 {
 	"id" : "727853079029874740",
 	"imageCommands" : ["cat","dog","birch","oldGuy"],
+	"xp" : {
+		"max" : 15,
+		"min" : 25,
+		"levelChannel" : ""
+	},
 	"rr" : {
 		"can_rr" : [],
 		"channel"  : ""
