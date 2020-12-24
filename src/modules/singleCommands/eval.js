@@ -1,5 +1,5 @@
-const baseCommand = require('../registry/structures/baseCommand')
-const { canEval } = require('../../config/bot.json')
+const baseCommand = require('../../registry/structures/baseCommand')
+const { canEval } = require('../../../config/bot.json')
 const discord = require("discord.js")
 
 module.exports = new baseCommand('eval',['run'],async (cmd,argz,message) => {

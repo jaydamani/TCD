@@ -1,4 +1,4 @@
-const baseEvent = require("../registry/structures/baseEvent")
+const baseEvent = require("../../registry/structures/baseEvent")
 const prefix = "-"
 
 module.exports = new baseEvent('message',(message) => {
@@ -13,7 +13,8 @@ module.exports = new baseEvent('message',(message) => {
 		
 		try {
 
-			client.commandMap.get(command)(command,argz,message)
+			const a = client.commandMap.get(command)
+			a.code = (command,argz,message,a.obj)
 		
 		} catch (err) {
 
@@ -21,7 +22,7 @@ module.exports = new baseEvent('message',(message) => {
 			
 			client.users.cache.get(`429606655320391680`)
 			.send(`channel : <#${message.channel.id}>\nmessage : ${message.url}\nerror : ${err}`)
-		
+
 		}
 		
 	}

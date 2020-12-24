@@ -1,8 +1,6 @@
-const message = require('../../Events/xp/message')
 const baseCommand = require('../../registry/structures/baseCommand')
 const { loadImage, createCanvas} = require('canvas')
 const { MessageAttachment } = require('discord.js')
-const xpMap = client.xpMap
 const w = 766		//width of canvas
 const h = 230		//height of canvas
 const ox = 20		//x position of overlay
@@ -18,10 +16,10 @@ const g = 5		//gap between fonts and line
 
 require('canvas-extras')
 
-module.exports = new baseCommand('xp',[],async (cmd,argz,message) => {
+module.exports = new baseCommand('xp',[],async (cmd,argz,message, { xpMap }) => {
 
     let bg = /https?:\/\/(\w+\.)+\w+/.test(argz[0]) ? argz.shift() : message.attachments.first()?.proxyURL 
-    const xp =client.xpMap.get(message.author.id)
+    const xp = xpMap.get(message.author.id)
     const a = createCanvas(w,h)
     const c = a.getContext("2d")
     const av = await loadImage('' || message.author.displayAvatarURL({format : 'jpg', size : 4096})) 

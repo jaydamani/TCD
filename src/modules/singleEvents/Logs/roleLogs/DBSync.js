@@ -1,10 +1,9 @@
-const baseEvent = require("../../../registry/structures/baseEvent");
+const baseEvent = require("../../../../registry/structures/baseEvent");
 
-module.exports = new baseEvent('ready',() => {
+module.exports = new baseEvent('ready',({ db }) => {
 
     const guild = client.guilds.cache.get(config.id)
     const members = guild.members.cache
-    const db = client.db
     const rolesArray = db.prepare('select * from roles').all()
     const rolesMap = new Map()
     const newMembers = []

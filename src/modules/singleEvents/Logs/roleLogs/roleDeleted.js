@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js")
-const baseEvent = require("../../../registry/structures/baseEvent")
-const { logs : { roleUpdateChannelID : logChannel }} = require('../../../../config/guild.json')
+const baseEvent = require("../../../../registry/structures/baseEvent")
+const { logs : { roleUpdateChannelID : logChannel }} = config
 
 module.exports = new baseEvent('roleDelete',async (r) => {
 

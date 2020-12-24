@@ -5,17 +5,10 @@ global.client = new discord.Client({
 })
 global.config = require('../config/guild.json')
 const bot = require("../config/bot")
-const { registerEvents, registerCommands } = require("./registry/registry")
+const register = require("./registry/registry")
 
 client.commandMap = new Map()
-client.db = new require('better-sqlite3')('./modDB.db');
-client.db.function('get',(a,b,c) => client[a].get(b)[c]);
+const db = new require('better-sqlite3')('./modDB.db');
+db.function('get',(a,b,c) => client[a].get(b)[c]);
 
-(async() => {
-
-	await registerCommands("./src/Commands" )
-	await registerEvents("./src/Events")
-
-	client.login(bot.token).catch(console.error)
-
-})()
+register('./src/modules',client,db).then(() => client.login(bot.token))

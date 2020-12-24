@@ -1,11 +1,9 @@
 const baseEvent = require('../../registry/structures/baseEvent');
 
-module.exports = new baseEvent('ready',() => {
+module.exports = new baseEvent('ready',reactionRoles => {
 
-    const dbObj = client.db.prepare('select * from reactionRoles').all()
+    const dbObj = reactionRoles.db.prepare('select * from reactionRoles').all()
 
-    const reactionRoles = client.reactionRoles = {}
-    
     dbObj.forEach((obj) => {
 
         let array = ((reactionRoles[obj.messageID] ??= {})[obj.reaction] ??= [])

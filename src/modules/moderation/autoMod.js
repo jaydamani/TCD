@@ -1,17 +1,16 @@
-const baseEvent = require("../registry/structures/baseEvent")
-const cooldown = require('../registry/structures/cooldown')
-const users = client.users.cache.keyArray()
+const baseEvent = require("../../registry/structures/baseEvent")
+const cooldown = require('../../registry/structures/cooldown')
 const ratelimits = config.ratelimits
 const Filter = require('bad-words')
 const filter = new Filter({ emptyList : false, placeholder : '*'})
 const { MessageEmbed } = require('discord.js')
 let { logs : { modLog } } = config
 
-const messageLimit = new cooldown('messages',users,ratelimits.message)
-const linkLimit = new cooldown('links',users,ratelimits.link)
-const attachmentLimit = new cooldown('attachments',users,ratelimits.attachment)
-const mentionLimit = new cooldown('mentions',users,ratelimits.mention)
-const inviteLimit = new cooldown('invites' ,users,ratelimits.invite)
+const messageLimit = new cooldown('messages',[],ratelimits.message)
+const linkLimit = new cooldown('links',[],ratelimits.link)
+const attachmentLimit = new cooldown('attachments',[],ratelimits.attachment)
+const mentionLimit = new cooldown('mentions',[],ratelimits.mention)
+const inviteLimit = new cooldown('invites' ,[],ratelimits.invite)
 
 module.exports =  new baseEvent('message',async (message) => {
 
@@ -29,10 +28,10 @@ module.exports =  new baseEvent('message',async (message) => {
 
     if(filter.isProfane(message.content)){
 
-        modLog = client.channels.resolve(modLog)
+        const log = message.channels.cache.get(modLog)
         message.delete()
         const warnMessage = await message.channel.send(`${message.author}, please don't swear much. There are kids here like me :pleading_face:`)
-        modLog.send({ embed :new MessageEmbed({
+        log.send({ embed :new MessageEmbed({
 
             title : `${message.author} sweared.`,
             description : `He said "${message.content}"`,

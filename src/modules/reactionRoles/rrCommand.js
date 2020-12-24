@@ -1,7 +1,7 @@
 const baseCommand = require('../../registry/structures/baseCommand');
 const { MessageEmbed, Util : { parseEmoji } } = require('discord.js');
 
-module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
+module.exports = new baseCommand('rr',[],async (cmd,argz,message,reactionRoles) => {
 
     if(argz.length < 3) return message.channel.send('Not enough argz')
     if(!message.member.hasPermission(8)) return message.channel.send('You do not have required permissions')
@@ -79,8 +79,6 @@ module.exports = new baseCommand('rr',[],async (cmd,argz,message) => {
 
     collector.on('collect',(reaction, user) => {
         console.log('collected!!!!!!',user.username,reaction.id ?? reaction.name)
-
-        const reactionRoles = client.reactionRoles
 
         if(reactionRoles[rrMessage.id]){
 
