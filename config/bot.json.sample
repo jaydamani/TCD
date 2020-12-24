@@ -1,0 +1,6 @@
+{
+    "token" : "Bot token Here",
+    "apis"  : {
+        "splash" : "Token from splash here"
+    }
+}
