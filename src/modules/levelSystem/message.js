@@ -1,6 +1,8 @@
 const baseEvent = require("../../registry/structures/baseEvent");
 const lastXPGiven = new Map()
 const config = require('../../../config/guild.json')
+const a = require('../../functions/toTemplate');
+
 module.exports = new baseEvent('message',( message, obj ) => {
 
     const xpMap = obj.xpMap
@@ -9,7 +11,6 @@ module.exports = new baseEvent('message',( message, obj ) => {
 
     lastXPGiven.set(message.author.id, message.createdAt.getTime())
 
-    //const channel = message.guild.channels.cache.get(config.xp.levelChannel) ?? message.channel
     let xp = xpMap.get(message.author.id)
 
     if(!xp) xpMap.set(message.author.id,xp = { xp : 0, lvl : 1 })
@@ -19,9 +20,11 @@ module.exports = new baseEvent('message',( message, obj ) => {
 
     if(xp.xp >= (result = 5*(xp.lvl**2) + 50*xp.lvl + 100)){
 
+        const channel = message.guild.channels.cache.get(config.xp.levelChannel)
+        ?? message.channel
         xp.xp -= result
         xp.lvl++
-        //channel.send(``)
+        channel.send(a(config.xp.message,{ message, xp }))
 
     }
 
