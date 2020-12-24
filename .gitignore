@@ -108,4 +108,3 @@ config/bot.json
 modDB.db
 #vscode config
 .vscode
-config/guild.json
