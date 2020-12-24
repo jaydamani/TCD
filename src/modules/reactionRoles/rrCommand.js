@@ -1,6 +1,6 @@
 const baseCommand = require('../../registry/structures/baseCommand');
 const { MessageEmbed, Util : { parseEmoji } } = require('discord.js');
-
+const config = require('../../../config/guild.json')
 module.exports = new baseCommand('rr',[],async (cmd,argz,message,reactionRoles) => {
 
     if(argz.length < 3) return message.channel.send('Not enough argz')

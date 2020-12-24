@@ -4,7 +4,8 @@
 	"xp" : {
 		"max" : 15,
 		"min" : 25,
-		"levelChannel" : ""
+		"levelChannel" : "",
+		"cooldown" : 60
 	},
 	"rr" : {
 		"can_rr" : [],

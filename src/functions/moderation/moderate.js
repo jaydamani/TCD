@@ -1,6 +1,6 @@
 const modEmbed = require('../../registry/structures/modEmbed')
 const exempt = require('./exempt')
-const { mod : { muteRoleID },logs : { modLog }} = config
+const { mod : { muteRoleID },logs : { modLog }} = require('../../../config/guild.json')
 
 const actionsList = {
     //warn is here in case something extra needs to be done. Like a warned role or probably some sort of cooldown

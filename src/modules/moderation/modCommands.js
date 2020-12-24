@@ -1,5 +1,5 @@
 const baseCommand = require("../../registry/structures/baseCommand");
-const { mod : permArrays } = config
+const { mod : permArrays } = require('../../../config/guild.json')
 const moderate = require('../../functions/moderation/moderate')
 const { time2MS, MS2String} = require("../../functions/timeFunctions");
 const obj = {
@@ -23,7 +23,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
     let time
     const mod = message.member
     const guild = message.guild
-    const db = client.db
+    const db = message.client.db
 
     offender = offender.match(/(?=<@!?)?([0-9]{15,})>?/)
 
@@ -62,7 +62,7 @@ module.exports = new baseCommand('warn',Object.keys(obj),async (cmd,argz,message
     try {
 
         offender = guild.members.cache.has(offender) ?
-        guild.members.cache.get(offender) : await client.users.fetch(offender)
+        guild.members.cache.get(offender) : await guild.client.users.fetch(offender)
 
     } catch (err) {
 

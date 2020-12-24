@@ -1,10 +1,11 @@
 const baseEvent = require("../../registry/structures/baseEvent")
 const cooldown = require('../../registry/structures/cooldown')
+const config = require('../..//../config/guild.json')
 const ratelimits = config.ratelimits
 const Filter = require('bad-words')
 const filter = new Filter({ emptyList : false, placeholder : '*'})
 const { MessageEmbed } = require('discord.js')
-let { logs : { modLog } } = config
+const { logs : { modLog } } = config
 
 const messageLimit = new cooldown('messages',[],ratelimits.message)
 const linkLimit = new cooldown('links',[],ratelimits.link)

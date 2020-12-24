@@ -1,6 +1,6 @@
 const baseEvent = require("../../registry/structures/baseEvent")
 
-module.exports = new baseEvent('rateLimit',(...b) => {
+module.exports = new baseEvent('rateLimit',(...b, { client }) => {
 
     const a = b.pop()
 

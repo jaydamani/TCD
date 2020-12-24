@@ -1,6 +1,6 @@
 const baseEvent = require("../../../../registry/structures/baseEvent");
-
-module.exports = new baseEvent('ready',({ db }) => {
+const config = require('../../../../../config/guild.json')
+module.exports = new baseEvent('ready',({ db, client }) => {
 
     const guild = client.guilds.cache.get(config.id)
     const members = guild.members.cache

@@ -1,5 +1,5 @@
 const baseCommand = require("../../registry/structures/baseCommand")
-const { mod : { can_ban } } = config
+const { mod : { can_ban } } = require('../../../config/guild.json')
 const exempt = require("../../functions/moderation/exempt")
 module.exports = new baseCommand('unban',[],(cmd,argz,message) => {
 

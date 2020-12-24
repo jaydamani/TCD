@@ -1,5 +1,6 @@
 const { createApi } = require('unsplash-js')
 const fetch = require('node-fetch')
+const config = require('../../../../config/guild.json')
 const { apis : { birch : accessKey} } = require('../../../../config/bot.json')
 const baseCommand = require('../../../registry/structures/baseCommand')
 const unsplash = createApi({

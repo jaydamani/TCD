@@ -1,12 +1,12 @@
 const baseCommand = require('../../registry/structures/baseCommand')
 const exempt = require('../../functions/moderation/exempt')
-const { mod : { canWarn }} = config
+const { mod : { canWarn }} = require('../../../config/guild.json')
 
 module.exports = new baseCommand('clearWarn',['unwarn'],async (cmd,argz,message) => {
     
     const guild = message.guild
     const mod = message.member
-    const db = client.db
+    const db = message.client.db
     const warn = db.prepare('select * from warnsTable where warnID = ? and status = 1').get(warn)   
     const reason = argz.join(" ")
     let offender
@@ -20,7 +20,7 @@ module.exports = new baseCommand('clearWarn',['unwarn'],async (cmd,argz,message)
     try {
 
         offender = guild.members.cache.has(warn.offenderID) ?
-        guild.members.cache.get(warn.offenderID) : await client.users.fetch(offenderID)
+        guild.members.cache.get(warn.offenderID) : await guild.client.users.fetch(offenderID)
 
     } catch (err) {
         

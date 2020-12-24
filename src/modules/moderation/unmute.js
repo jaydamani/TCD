@@ -1,5 +1,5 @@
 const baseCommand = require("../../registry/structures/baseCommand")
-const { mod : modPerm  } = config
+const { mod : modPerm  } = require('../../../config/guild.json')
 const exempt = require("../../functions/moderation/exempt")
 const actionsList = {
     unban : { name : 'Unban', a : 'ban', perm : 'BAN_MEMBERS'},
@@ -10,7 +10,7 @@ module.exports = new baseCommand('unmute',['unshut'],async (cmd,argz,message) =>
 
     if(argz.length < 2) return message.channel.send('Not enough arguments.\n*proceeds to mute you*')
 
-    const db = client.db
+    const db = message.client.db
     let [dbObj,...reason] = argz
     const mod = message.member
     const guild = message.guild
@@ -29,7 +29,7 @@ module.exports = new baseCommand('unmute',['unshut'],async (cmd,argz,message) =>
     try {
 
         offender = guild.members.cache.has(dbObj.offenderID) ?
-        guild.members.cache.get(dbObj.offenderID) : await client.users.fetch(dbObj.offenderID)
+        guild.members.cache.get(dbObj.offenderID) : await guild.client.users.fetch(dbObj.offenderID)
 
     } catch (err) {
 

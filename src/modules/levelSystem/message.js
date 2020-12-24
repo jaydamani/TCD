@@ -1,11 +1,11 @@
 const baseEvent = require("../../registry/structures/baseEvent");
 const lastXPGiven = new Map()
-
+const config = require('../../../config/guild.json')
 module.exports = new baseEvent('message',( message, obj ) => {
-    console.log(obj,69)
+
     const xpMap = obj.xpMap
     if(message.author.bot) return
-    if(message.createdAt - lastXPGiven.get(message.author.id) < config.xp.coolDown/1000) return
+    if((message.createdAt - lastXPGiven.get(message.author.id)) < config.xp.coolDown*1000) return
 
     lastXPGiven.set(message.author.id, message.createdAt.getTime())
 

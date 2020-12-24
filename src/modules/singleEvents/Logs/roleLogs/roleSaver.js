@@ -7,7 +7,7 @@ module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
     const guild = oldMember.guild    
     const rolesRemoved = oldMember.roles.cache.filter(m => !newMember.roles.cache.has(m.id))
     const rolesAdded = newMember.roles.cache.filter(m => !oldMember.roles.cache.has(m.id))
-    const db = client.db
+    const db = newMember.client.db
     const query = db.prepare('update roles set roleIDs = ? where memberID = ?')
     const embed = new MessageEmbed({ title : `Roles updated for $(newMember)` })
 

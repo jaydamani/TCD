@@ -1,5 +1,5 @@
 const baseEvent = require("../../registry/structures/baseEvent")
-
+const config = require('../../../config/guild.json')
 module.exports = new baseEvent('ready',obj => {
 
     const dbArray = obj.db.prepare('select * from xpTable').all()
