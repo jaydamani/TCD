@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/main",
   "scripts": {
-    "start": "nodemon ."
+    "start": "nodemon .",
+    "setup" : "./setup"
   },
   "keywords": [],
   "author": "jayDamani",
@@ -17,5 +18,8 @@
     "discord.js": "^12.5.1",
     "node-fetch": "^2.6.1",
     "unsplash-js": "^7.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
   }
 }

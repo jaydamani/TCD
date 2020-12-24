@@ -1,0 +1,16 @@
+#!/bin/bash
+echo starting the setup
+read -sp 'botToken :' botToken
+echo
+read -sp 'unsplash api key :' unsplash
+echo
+echo "{
+    \"token\" : \"$botToken\",
+    \"apis\" : {
+        \"unsplash\" : \"$unsplash\"
+    }
+}" > ./test/bot.json
+echo 'bot.json created.'
+read -s "ild :" guildID
+guildID=${guildID:-test}
+echo $id
