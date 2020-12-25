@@ -7,7 +7,7 @@ module.exports = new baseEvent('message',( message, obj ) => {
 
     const xpMap = obj.xpMap
     if(message.author.bot) return
-    if((message.createdAt - lastXPGiven.get(message.author.id)) < config.xp.coolDown*1000) return
+    if((message.createdAt - lastXPGiven.get(message.author.id)) < config.xp.cooldown*1000) return
 
     lastXPGiven.set(message.author.id, message.createdAt.getTime())
 
@@ -24,7 +24,8 @@ module.exports = new baseEvent('message',( message, obj ) => {
         ?? message.channel
         xp.xp -= result
         xp.lvl++
-        channel.send(a(config.xp.message,{ message, xp }))
+        channel.send(a(config.xp.message,{ message, xp, user : message.member }))
+        console.log(xp)
 
     }
 

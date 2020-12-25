@@ -16,10 +16,10 @@ const g = 5		//gap between fonts and line
 
 require('canvas-extras')
 
-module.exports = new baseCommand('xp',[],async (cmd,argz,message, { xpMap }) => {
+module.exports = new baseCommand('xp',[],async (cmd,argz,message, ob) => {
 
     let bg = /https?:\/\/(\w+\.)+\w+/.test(argz[0]) ? argz.shift() : message.attachments.first()?.proxyURL 
-    const xp = xpMap.get(message.author.id)
+    const xp = ob.xpMap.get(message.author.id)
     const a = createCanvas(w,h)
     const c = a.getContext("2d")
     const av = await loadImage('' || message.author.displayAvatarURL({format : 'jpg', size : 4096})) 
@@ -60,7 +60,7 @@ module.exports = new baseCommand('xp',[],async (cmd,argz,message, { xpMap }) => 
     c.textBaseline = 'middle'
     c.fillText(`level : ${xp.lvl}`, lx, ( py + ly )/2)
     c.textAlign = "right"
-    c.fillText(`${xp.xp}/${5*(xp.lvl**2 + 50*xp.lvl + 100)}`, lx2,  ( py + ly )/2)
+    c.fillText(`${xp.xp}/${5*(xp.lvl**2) + 50*xp.lvl + 100}`, lx2,  ( py + ly )/2)
 
     //circle profile
     c.strokeStyle = '#FFFFFF00'

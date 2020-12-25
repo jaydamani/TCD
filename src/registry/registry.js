@@ -22,7 +22,7 @@ async function register(dirPath,client,db){
 
 			if(file.name.endsWith('.js')){
 
-				const fileObj = require("../../" + path.join(dir,file.name))
+				const fileObj =require("../../" + path.join(dir,file.name))
 				
 				if(fileObj.constructor == baseEvent){
 
@@ -33,7 +33,7 @@ async function register(dirPath,client,db){
 				}
 				else if(fileObj.constructor == baseCommand){
 
-					fileObj.obj = this
+					fileObj.obj = obj
 					client.commandMap.set(fileObj.name,fileObj)
 					fileObj.alias.forEach(n => client.commandMap.set(n,fileObj))
 
