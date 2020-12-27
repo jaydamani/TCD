@@ -46,15 +46,25 @@ async function register(dirPath,client,db){
 	}
 
 	await registerFiles(dirPath)
+	
+	client.once('ready',() => {
+
+		params.map(a => a.partial ? a.fetch() : a)
+		eventArray[1].forEach(({ code, obj }) => code(...params, obj))
+
+	})
+
+	eventsMap.delete('ready')
+
 	for(const eventArray of eventsMap){
 
 		client.on(eventArray[0],(...params) =>{
 
 			params.map(a => a.partial ? a.fetch() : a)
 			eventArray[1].forEach(({ code, obj }) => code(...params, obj))
-		
-		111})
-		
+
+		})
+
 	}
 
 }
