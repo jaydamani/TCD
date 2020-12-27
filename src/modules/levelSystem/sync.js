@@ -7,14 +7,14 @@ module.exports = new baseEvent('ready',obj => {
     const dbArray = db.prepare('select * from xpTable').all()
     let syncedIDs = dbArray.map(a => a.memberID)
     const xpMap = obj.xpMap = new Map()
-    dbArray.forEach(a => xpMap.set(a.memberID,{ xp : a.xp, lvl : a.level, image : a.imageURL, color : a.color ?? config.color }))
+    dbArray.forEach(a => xpMap.set(a.memberID, a))
 
     setInterval(() => {
 
         const newIDs = Array.from(xpMap.entries())
         const updated  = newIDs.filter(a => a[1].wasUpdated)
         const added = newIDs.filter(a => !syncedIDs.includes(a[0]))
-        .map(a => `('${a[0]}',${a[1].xp},${a[1].lvl})`).join()
+        .map(a => `('${a[0]}',${a[1].xp},${a[1].level})`).join()
 
         for (const [memberID,xpObj] of updated) {
 

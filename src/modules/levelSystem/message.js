@@ -18,12 +18,12 @@ module.exports = new baseEvent('message',( message, obj ) => {
 
     xp.xp += Math.floor(Math.random()*(config.xp.max - config.xp.min) + config.xp.min)
 
-    if(xp.xp >= (result = 5*(xp.lvl**2) + 50*xp.lvl + 100)){
+    if(xp.xp >= (result = 5*(xp.level**2) + 50*xp.level + 100)){
 
         const channel = message.guild.channels.cache.get(config.xp.levelChannel)
         ?? message.channel
         xp.xp -= result
-        xp.lvl++
+        xp.level++
         channel.send(a(config.xp.message,{ message, xp, user : message.member }))
         console.log(xp)
 
