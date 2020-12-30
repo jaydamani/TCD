@@ -3,7 +3,7 @@ const lastXPGiven = new Map()
 const config = require('../../../config/guild.json')
 const a = require('../../functions/toTemplate');
 
-module.exports = new baseEvent('message',( message, obj ) => {
+module.exports = new baseEvent('message',( message, { getXP, setXP } ) => {
 
     const xpMap = obj.xpMap
     if(message.author.bot) return
@@ -11,21 +11,20 @@ module.exports = new baseEvent('message',( message, obj ) => {
 
     lastXPGiven.set(message.author.id, message.createdAt.getTime())
 
-    let xp = xpMap.get(message.author.id)
+    const obj = xpMap.get(message.author.id)
 
-    if(!xp) xpMap.set(message.author.id,xp = { xp : 0, lvl : 1 })
-    else xp.wasUpdated = true
+    if(!obj) xpMap.set(message.author.id, obj = { xp : 0, lvl : 1 })
 
-    xp.xp += Math.floor(Math.random()*(config.xp.max - config.xp.min) + config.xp.min)
+    obj.xp += Math.floor(Math.random()*(config.xp.max - config.xp.min) + config.xp.min)
+    obj.wasUpdated = true
 
-    if(xp.xp >= (result = 5*(xp.level**2) + 50*xp.level + 100)){
+    if(obj.xp >= obj.xpForNextLevel(obj.level)){
 
         const channel = message.guild.channels.cache.get(config.xp.levelChannel)
         ?? message.channel
-        xp.xp -= result
-        xp.level++
-        channel.send(a(config.xp.message,{ message, xp, user : message.member }))
-        console.log(xp)
+        obj.xp -= result
+        obj.level++
+        channel.send(a(config.xp.message,{ message, obj, user : message.member }))
 
     }
 
