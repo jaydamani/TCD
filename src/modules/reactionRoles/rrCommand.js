@@ -1,7 +1,7 @@
-const baseCommand = require('../../registry/structures/baseCommand');
+const BaseCommand = require('../../registry/structures/BaseCommand');
 const { MessageEmbed, Util : { parseEmoji } } = require('discord.js');
 const config = require('../../../config/guild.json')
-module.exports = new baseCommand('rr',[],async (cmd,argz,message,reactionRoles) => {
+module.exports = new BaseCommand('rr',[],async (cmd,argz,message,reactionRoles) => {
 
     if(argz.length < 3) return message.channel.send('Not enough argz')
     if(!message.member.hasPermission(8)) return message.channel.send('You do not have required permissions')

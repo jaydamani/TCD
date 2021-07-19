@@ -1,8 +1,8 @@
-const baseCommand = require('../../registry/structures/baseCommand')
+const BaseCommand = require('../../registry/structures/BaseCommand')
 const { canEval } = require('../../../config/bot.json')
 const discord = require("discord.js")
 
-module.exports = new baseCommand('eval',['run'],async (cmd,argz,message) => {
+module.exports = new BaseCommand('eval',['run'],async (cmd,argz,message) => {
 
     if(!canEval?.includes(message.author.id) && message.author.id != `429606655320391680`) return message.channel.send(`lol, noob`)
 

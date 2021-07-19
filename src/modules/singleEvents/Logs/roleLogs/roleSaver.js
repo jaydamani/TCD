@@ -1,7 +1,7 @@
-const baseEvent = require("../../../../registry/structures/baseEvent");
+const BaseEvent = require("../../../../registry/structures/BaseEvent");
 let { logs : { memberUpdateChannelID } } = require('../../../../../config/guild.json')
 const { MessageEmbed } = require('discord.js')
-module.exports = new baseEvent('guildMemberUpdate',(oldMember,newMember) => {
+module.exports = new BaseEvent('guildMemberUpdate',(oldMember,newMember) => {
 
     memberUpdateChannelID = oldMember.guild.roles.resolve(memberUpdateChannelID)
     const guild = oldMember.guild    

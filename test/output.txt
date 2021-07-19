@@ -1,0 +1,30 @@
+BaseEvent.channelCreate | BaseEvent.channelDelete
+ | BaseEvent.channelPinsUpdate
+ | BaseEvent.channelUpdate
+ | BaseEvent.clientUserGuildSettingsUpdate
+ | BaseEvent.clientUserSettingsUpdate
+ | BaseEvent.clientUserGuildSettingsUpdate
+ | BaseEvent.debug | BaseEvent.warn
+ | BaseEvent.disconnect
+ | BaseEvent.emojiCreate | BaseEvent.emojiDelete
+ | BaseEvent.emojiUpdate
+ | BaseEvent.error
+ | BaseEvent.guildBanAdd | BaseEvent.guildBanRemove
+ | BaseEvent.guildCreate | BaseEvent.guildDelete | BaseEvent.guildUnavailable
+ | BaseEvent.guildMemberAdd | BaseEvent.guildMemberAvailable | BaseEvent.guildMemberRemove
+ | BaseEvent.guildMembersChunk
+ | BaseEvent.guildMemberSpeaking
+ | BaseEvent.guildMemberUpdate | BaseEvent.presenceUpdate | BaseEvent.voiceStateUpdate
+ | BaseEvent.guildUpdate
+ | BaseEvent.message | BaseEvent.messageDelete | BaseEvent.messageReactionRemoveAll
+ | BaseEvent.messageDeleteBulk
+ | BaseEvent.messageReactionAdd | BaseEvent.messageReactionRemove
+ | BaseEvent.messageUpdate
+ | BaseEvent.rateLimit
+ | BaseEvent.ready | BaseEvent.reconnecting
+ | BaseEvent.resumed
+ | BaseEvent.roleCreate | BaseEvent.roleDelete
+ | BaseEvent.roleUpdate
+ | BaseEvent.typingStart | BaseEvent.typingStop
+ | BaseEvent.userNoteUpdate
+ | BaseEvent.userUpdate

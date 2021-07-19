@@ -1,6 +1,6 @@
-const baseEvent = require('../../registry/structures/baseEvent');
+const BaseEvent = require('../../registry/structures/BaseEvent');
 
-module.exports = new baseEvent('messageReactionAdd',(reaction, user,reactionRoles) => {
+module.exports = new BaseEvent('messageReactionAdd',(reaction, user,reactionRoles) => {
     console.log(reactionRoles)
     if(!reactionRoles.hasOwnProperty(reaction.message.id)) return
 

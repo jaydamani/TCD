@@ -1,1 +1,2 @@
-require()
+"use strict";
+console.log(require('./a'));

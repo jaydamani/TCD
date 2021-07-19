@@ -1,6 +1,6 @@
-const baseEvent = require('../../registry/structures/baseEvent');
+const BaseEvent = require('../../registry/structures/BaseEvent');
 
-module.exports = new baseEvent('ready',reactionRoles => {
+module.exports = new BaseEvent('ready',reactionRoles => {
 
     const dbObj = reactionRoles.db.prepare('select * from reactionRoles').all()
 
